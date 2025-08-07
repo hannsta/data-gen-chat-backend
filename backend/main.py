@@ -22,9 +22,14 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
+    """Root endpoint - also serves as a health check"""
+    import os
     return {
         "message": "Pendo Data Generation API - Streamlined Version",
         "version": "2.0.0",
+        "status": "healthy",
+        "port": os.environ.get("PORT", "8000"),
+        "timestamp": time.time(),
         "endpoints": {
             "health": "GET /health",
             "execute_workflow": "POST /execute_workflow"
@@ -33,7 +38,16 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "database": "none", "mode": "stateless"}
+    """Health check endpoint that returns detailed status"""
+    import os
+    return {
+        "status": "healthy",
+        "database": "none", 
+        "mode": "stateless",
+        "port": os.environ.get("PORT", "8000"),
+        "timestamp": time.time(),
+        "version": "2.0.0"
+    }
 
 @app.post("/execute_workflow", response_model=DirectExecutionResponse)
 async def execute_workflow(request: DirectExecutionRequest):

@@ -33,8 +33,9 @@ RUN playwright install --with-deps chromium
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Expose the port that the app runs on
+# Expose the port that the app runs on (Railway will set PORT dynamically)
 EXPOSE 8000
 
-# Use uvicorn with environment variable for port (Railway will override via startCommand)
-CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"] 
+# Use uvicorn with explicit host binding and port from environment
+# Railway will override this command via startCommand in railway.toml
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000} --log-level info"] 

@@ -64,4 +64,5 @@ README.md
 failed_actions_*.json
 
 # Temporary files
-temp_backup.py 
+temp_backup.py
+test_endpoints.py 

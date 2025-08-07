@@ -1,5 +1,5 @@
-# Use Ubuntu 22.04 with Python 3.11
-FROM ubuntu:22.04
+# Use Python 3.11 official image
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
@@ -9,16 +9,10 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies and Python 3.11
+# Install system dependencies needed for Playwright
 RUN apt-get update && apt-get install -y \
-    python3.11 \
-    python3.11-pip \
-    python3.11-dev \
-    python3.11-venv \
     wget \
     curl \
-    && ln -s /usr/bin/python3.11 /usr/bin/python \
-    && ln -s /usr/bin/pip3.11 /usr/bin/pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

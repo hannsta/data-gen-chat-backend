@@ -36,5 +36,5 @@ USER appuser
 # Expose the port that the app runs on
 EXPOSE 8000
 
-# Use the start_server.py script to run the application
-CMD ["python", "start_server.py", "--host", "0.0.0.0", "--port", "8000", "--no-reload"] 
+# Use uvicorn directly to avoid dependency check delays
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"] 

@@ -90,24 +90,22 @@ def main():
         sys.exit(1)
     
     if not check_playwright():
-        print("\n💡 To install Playwright browsers:")
-        print("   playwright install chromium")
-        answer = input("\nDo you want to install Playwright browsers now? (y/n): ")
-        if answer.lower() in ['y', 'yes']:
-            try:
-                subprocess.run(['playwright', 'install', 'chromium'], check=True)
-                print("✅ Playwright browsers installed")
-            except subprocess.CalledProcessError:
-                print("❌ Failed to install Playwright browsers")
-                sys.exit(1)
-        else:
-            print("⚠️  Starting server without browser installation (simulations may fail)")
+        # In production (Railway/Docker), browsers should already be installed
+        # If not, try to install them automatically without prompting
+        print("🔧 Playwright browsers not found, attempting automatic installation...")
+        try:
+            subprocess.run(['playwright', 'install', 'chromium'], check=True)
+            print("✅ Playwright browsers installed")
+        except subprocess.CalledProcessError:
+            print("❌ Failed to install Playwright browsers")
+            # Don't exit in production - let the app start and handle browser errors gracefully
+            print("⚠️  Starting server without browsers (simulations may fail)")
     
     # Parse command line arguments
     import argparse
     parser = argparse.ArgumentParser(description="Start Pendo Data Generation Backend")
     parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
-    parser.add_argument("--port", type=int, default=8000, help="Port to bind to") 
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)), help="Port to bind to") 
     parser.add_argument("--no-reload", action="store_true", help="Disable auto-reload")
     
     args = parser.parse_args()

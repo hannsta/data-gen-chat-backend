@@ -36,5 +36,5 @@ USER appuser
 # Expose the port that the app runs on
 EXPOSE 8000
 
-# Use uvicorn directly to avoid dependency check delays
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"] 
+# Use uvicorn with environment variable for port (Railway will override via startCommand)
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"] 

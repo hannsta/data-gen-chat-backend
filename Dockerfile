@@ -26,16 +26,18 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY . .
 
+# Make startup script executable
+RUN chmod +x startup.sh
+
 # Install Playwright browsers with system dependencies
 RUN playwright install --with-deps chromium
 
-# Create a non-root user for security (optional but recommended)
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
+# Note: Running as root for now to avoid Playwright permission issues
+# In production, you might want to create a proper non-root user setup
 
 # Expose the port that the app runs on (Railway will set PORT dynamically)
 EXPOSE 8000
 
-# Use uvicorn with explicit host binding and port from environment
+# Use startup script for better debugging
 # Railway will override this command via startCommand in railway.toml
-CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000} --log-level info"] 
+CMD ["./startup.sh"] 

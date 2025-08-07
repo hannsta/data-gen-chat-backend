@@ -2,9 +2,9 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "uvicorn backend.main:app --host 0.0.0.0 --port $PORT --log-level info"
+startCommand = "./startup.sh"
 healthcheckPath = "/health"
-healthcheckTimeout = 300
+healthcheckTimeout = 600
 restartPolicyType = "on_failure"
 
 # Resource requirements for Playwright

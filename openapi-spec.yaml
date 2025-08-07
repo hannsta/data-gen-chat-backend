@@ -1,0 +1,273 @@
+openapi: 3.0.0
+info:
+  title: Pendo Data Generation API
+  description: |
+    **Streamlined API for validating and executing Pendo workflow simulations**
+    
+    This is a stateless backend that executes workflow simulations using Playwright
+    to capture real Pendo events. No database dependencies - completely stateless operation.
+    
+    **Key Features:**
+    - Fast selector validation (test mode)
+    - Full workflow execution with user simulation
+    - Real Pendo event capture via browser automation
+    - Stateless architecture for easy deployment
+    
+    **Workflow:**
+    1. Create workflow JSON with user journey paths and selectors
+    2. Call `/execute_workflow` with test_mode=true for fast validation (~30-60s)
+    3. Call `/execute_workflow` with test_mode=false for full execution
+    4. Get results with captured events and performance metrics
+    
+  version: 2.0.0
+  contact:
+    name: Pendo Solutions Engineering
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://your-backend-domain.com
+    description: Production server
+
+paths:
+  /:
+    get:
+      summary: API information and available endpoints
+      description: Returns basic API information and list of available endpoints
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  version:
+                    type: string
+                  endpoints:
+                    type: object
+                    properties:
+                      health:
+                        type: string
+                      execute_workflow:
+                        type: string
+
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns the health status of the API and confirms stateless mode
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  database:
+                    type: string
+                    example: "none"
+                  mode:
+                    type: string
+                    example: "stateless"
+
+  /execute_workflow:
+    post:
+      summary: Execute workflow simulation
+      description: |
+        **Single endpoint for both validation and execution**
+        
+        **Two modes:**
+        - `test_mode=true`: Fast validation of selectors (~30-60 seconds)
+          - Tests all selectors without full user simulation
+          - Returns validation results and failed actions
+          - Perfect for debugging workflows
+        
+        - `test_mode=false`: Full execution with user simulation
+          - Runs complete user journeys with specified user count
+          - Captures real Pendo events via browser automation
+          - Returns execution metrics and performance data
+        
+        **Stateless Operation:**
+        - No database dependencies
+        - Results returned immediately in response
+        - Failed actions included in response for analysis
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectExecutionRequest'
+      responses:
+        '200':
+          description: Workflow execution completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectExecutionResponse'
+        '400':
+          description: Invalid request format or parameters
+        '500':
+          description: Execution error
+
+components:
+  schemas:
+    DirectExecutionRequest:
+      type: object
+      required: [workflow_json, app_url]
+      properties:
+        workflow_json:
+          $ref: '#/components/schemas/WorkflowDefinition'
+        app_url:
+          type: string
+          format: uri
+          description: Live hosted app URL to simulate against
+          example: "https://your-app.com"
+        user_count:
+          type: integer
+          minimum: 1
+          default: 1
+          description: Number of users to simulate (ignored in test mode)
+        batch_size:
+          type: integer
+          minimum: 1
+          default: 1
+          description: Concurrent browser sessions (ignored in test mode)
+        test_mode:
+          type: boolean
+          default: false
+          description: If true, runs fast validation only. If false, runs full execution.
+
+    DirectExecutionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the execution succeeded
+        workflow_name:
+          type: string
+          description: Name of the executed workflow
+        sessions_completed:
+          type: integer
+          description: Number of user sessions completed
+        templates_recorded:
+          type: integer
+          description: Number of workflow templates recorded
+        execution_time_seconds:
+          type: number
+          description: Total execution time in seconds
+        performance_note:
+          type: string
+          description: Performance summary message
+        test_mode:
+          type: boolean
+          description: Whether this was a test mode execution
+        error:
+          type: string
+          description: Error message if execution failed
+        failed_actions:
+          type: object
+          description: Failed actions by path (only in test mode)
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FailedAction'
+        validation_summary:
+          type: string
+          description: Summary of validation results (only in test mode)
+
+    WorkflowDefinition:
+      type: object
+      required: [workflow_name, user_journey_paths]
+      properties:
+        workflow_name:
+          type: string
+          description: Unique identifier for this workflow
+          example: "ecommerce_checkout_flow"
+        description:
+          type: string
+          description: Human-readable description of the workflow
+        user_journey_paths:
+          type: array
+          description: List of user journey paths with their steps and percentages
+          items:
+            $ref: '#/components/schemas/UserJourneyPath'
+        metadata:
+          type: object
+          description: Additional workflow metadata
+          additionalProperties: true
+
+    UserJourneyPath:
+      type: object
+      required: [path_id, percentage, steps]
+      properties:
+        path_id:
+          type: string
+          description: Unique identifier for this user journey path
+          example: "happy_path_checkout"
+        percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Percentage of users that should follow this path
+          example: 70
+        description:
+          type: string
+          description: Human-readable description of this path
+        steps:
+          type: array
+          description: Ordered list of steps in this user journey
+          items:
+            $ref: '#/components/schemas/SimulationStep'
+
+    SimulationStep:
+      type: object
+      required: [action, selector]
+      properties:
+        action:
+          type: string
+          enum: [navigate, click, type, wait, hover, select]
+          description: Action to perform
+        selector:
+          type: string
+          description: CSS selector or text selector for the element
+          example: "button[data-testid='checkout-btn']"
+        value:
+          type: string
+          description: Value to type or select (for type/select actions)
+        description:
+          type: string
+          description: Human-readable description of this step
+        wait_after:
+          type: integer
+          minimum: 0
+          default: 1000
+          description: Milliseconds to wait after this step
+
+    FailedAction:
+      type: object
+      properties:
+        step:
+          type: integer
+          description: Step number that failed
+        selector:
+          type: string
+          description: Selector that failed
+        action:
+          type: string
+          description: Action that was attempted
+        error:
+          type: string
+          description: Error message
+        description:
+          type: string
+          description: Step description
+        value:
+          type: string
+          description: Value that was being typed/selected (if applicable) 

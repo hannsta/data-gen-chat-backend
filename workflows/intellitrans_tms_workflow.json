@@ -1,0 +1,191 @@
+{
+  "workflow_name": "intellitrans_tms_workflows",
+  "description": "Full spectrum of logistics user paths including shipment review, tender acceptance, detail analysis, and navigation behavior",
+  "user_journey_paths": [
+    {
+      "path_id": "monitor_active_shipments",
+      "percentage": 12.0,
+      "description": "User navigates to shipment table and reviews key statuses",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 950},
+        {"action": "wait", "delay_ms": 1800},
+        {"action": "click", "selector": "[data-pendo-id='table-header-status']", "delay_ms": 800},
+        {"action": "wait", "delay_ms": 1200}
+      ]
+    },
+    {
+      "path_id": "review_then_accept_tender",
+      "percentage": 10.0,
+      "description": "User investigates tender and accepts it",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1100},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='view-details-1']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 2000},
+        {"action": "click", "selector": "[data-pendo-id='accept-tender-button']", "delay_ms": 900},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='breadcrumb-shipments']", "delay_ms": 700}
+      ]
+    },
+    {
+      "path_id": "explore_then_exit_extended",
+      "percentage": 10.0,
+      "description": "User visits shipments and carriers, then exits",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 800},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='nav-carriers']", "delay_ms": 900},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 700}
+      ]
+    },
+    {
+      "path_id": "deep_shipment_investigation",
+      "percentage": 8.0,
+      "description": "User opens shipment and analyzes all fields",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1300},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 850},
+        {"action": "click", "selector": "[data-pendo-id='shipment-row-2']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 2200},
+        {"action": "click", "selector": "[data-pendo-id='detail-carrier-2']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='detail-value-2']", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo-id='breadcrumb-shipments']", "delay_ms": 900}
+      ]
+    },
+    {
+      "path_id": "quick_nav_clickaround_extended",
+      "percentage": 8.0,
+      "description": "User explores multiple sections then returns home",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1050},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 750},
+        {"action": "click", "selector": "[data-pendo-id='nav-carriers']", "delay_ms": 850},
+        {"action": "click", "selector": "[data-pendo-id='nav-reports']", "delay_ms": 700},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 800}
+      ]
+    },
+    {
+      "path_id": "abandon_after_detail_view",
+      "percentage": 7.0,
+      "description": "User views tender but exits without acting",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1250},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='view-details-4']", "delay_ms": 900},
+        {"action": "wait", "delay_ms": 2500},
+        {"action": "click", "selector": "[data-pendo-id='back-to-dashboard-button']", "delay_ms": 900}
+      ]
+    },
+    {
+      "path_id": "multi_tender_review",
+      "percentage": 6.0,
+      "description": "User compares two tenders before decision",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1350},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 950},
+        {"action": "click", "selector": "[data-pendo-id='view-details-1']", "delay_ms": 800},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='breadcrumb-shipments']", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo-id='view-details-6']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 1800},
+        {"action": "click", "selector": "[data-pendo-id='accept-tender-button']", "delay_ms": 800}
+      ]
+    },
+    {
+      "path_id": "table_sort_then_exit",
+      "percentage": 5.0,
+      "description": "User sorts the table and exits",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1100},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='table-header-pickup']", "delay_ms": 700},
+        {"action": "wait", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 750}
+      ]
+    },
+    {
+      "path_id": "sidebar_toggle_and_explore",
+      "percentage": 5.0,
+      "description": "User toggles sidebar and explores views",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='sidebar-toggle']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='nav-settings']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='sidebar-toggle']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='nav-carriers']", "delay_ms": 900}
+      ]
+    },
+    {
+      "path_id": "brand_logo_navigation",
+      "percentage": 4.0,
+      "description": "User clicks brand logo for navigation",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 950},
+        {"action": "click", "selector": "[data-pendo-id='nav-settings']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='app-logo']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 1500}
+      ]
+    },
+    {
+      "path_id": "confirm_then_revisit",
+      "percentage": 3.0,
+      "description": "User accepts a tender then double checks",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 850},
+        {"action": "click", "selector": "[data-pendo-id='view-details-6']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='accept-tender-button']", "delay_ms": 900},
+        {"action": "wait", "delay_ms": 1800},
+        {"action": "click", "selector": "[data-pendo-id='breadcrumb-shipments']", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo-id='view-details-6']", "delay_ms": 800}
+      ]
+    },
+    {
+      "path_id": "shipment_scroll_review",
+      "percentage": 3.0,
+      "description": "User reviews all table columns before clicking",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 950},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 850},
+        {"action": "wait", "delay_ms": 2000},
+        {"action": "click", "selector": "[data-pendo-id='table-header-carrier']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='shipment-row-3']", "delay_ms": 950}
+      ]
+    },
+    {
+      "path_id": "compare_tender_vs_confirmed",
+      "percentage": 3.0,
+      "description": "User compares tender and confirmed shipments",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1100},
+        {"action": "click", "selector": "[data-pendo-id='nav-shipments']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='view-details-1']", "delay_ms": 950},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='breadcrumb-shipments']", "delay_ms": 750},
+        {"action": "click", "selector": "[data-pendo-id='view-details-2']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 1500}
+      ]
+    },
+    {
+      "path_id": "nav_only_no_action",
+      "percentage": 2.0,
+      "description": "User only explores nav, no shipment interaction",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 850},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='nav-reports']", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo-id='nav-settings']", "delay_ms": 800}
+      ]
+    }
+  ],
+  "metadata": {
+    "total_paths": 15,
+    "estimated_avg_duration_ms": 104000,
+    "focus": "shipment_tracking_and_tender_acceptance"
+  }
+}

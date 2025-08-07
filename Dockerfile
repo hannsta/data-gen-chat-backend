@@ -1,5 +1,5 @@
-# Use the official Playwright Python image with browsers pre-installed
-FROM mcr.microsoft.com/playwright/python:v1.40.0-focal
+# Use Ubuntu 22.04 with Python 3.11
+FROM ubuntu:22.04
 
 # Set working directory
 WORKDIR /app
@@ -7,17 +7,32 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies and Python 3.11
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-pip \
+    python3.11-dev \
+    python3.11-venv \
+    wget \
+    curl \
+    && ln -s /usr/bin/python3.11 /usr/bin/python \
+    && ln -s /usr/bin/pip3.11 /usr/bin/pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better Docker layer caching
 COPY requirements.txt .
 
 # Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY . .
 
-# Ensure Playwright browsers are installed (should already be in the base image)
+# Install Playwright browsers with system dependencies
 RUN playwright install --with-deps chromium
 
 # Create a non-root user for security (optional but recommended)

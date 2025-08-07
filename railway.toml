@@ -7,6 +7,11 @@ healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 
+# Resource requirements for Playwright
+[resources]
+memory = "2Gi"
+cpu = "1000m"
+
 [env]
 PYTHONUNBUFFERED = "1"
 PYTHONPATH = "/app" 

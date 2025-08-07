@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Database files (not needed in container)
+*.db
+
+# Log files
+logs/
+*.log
+
+# Test files and notebooks
+*.ipynb
+demo_test.ipynb
+
+# Documentation
+README.md
+*.md
+
+# Failed action files (shouldn't exist anymore but just in case)
+failed_actions_*.json
+
+# Temporary files
+temp_backup.py 

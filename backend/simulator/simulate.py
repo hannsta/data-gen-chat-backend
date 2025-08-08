@@ -83,33 +83,36 @@ class Simulator:
                             await page.goto(url)
                             if not test_mode:
                                 # Only wait for networkidle in normal mode (for Pendo capture)
-                                await page.wait_for_load_state('networkidle', timeout=30000)
+                                await page.wait_for_load_state('networkidle', timeout=45000)
                             else:
                                 # In test mode, just wait for DOM to be ready
                                 await page.wait_for_load_state('domcontentloaded')
                             
                             # Extra wait to ensure Pendo is fully loaded
-                            # Adjust Pendo initialization wait based on mode
-                            pendo_wait = 200 if test_mode else 3000  # Allow Pendo to initialize
-                            await page.wait_for_timeout(pendo_wait)  # Wait for Pendo to initialize
+                            # Skip Pendo initialization wait in test mode - we only care about selector validation
+                            if not test_mode:
+                                pendo_wait = 3000  # Allow Pendo to initialize
+                                await page.wait_for_timeout(pendo_wait)  # Wait for Pendo to initialize
                             
-                            # Check what Pendo objects are available
-                            try:
-                                pendo_info = await page.evaluate("""
-                                    () => {
-                                        return {
-                                            hasPendo: typeof window.pendo !== 'undefined',
-                                            hasTrack: typeof window.pendo !== 'undefined' && typeof window.pendo.track === 'function',
-                                            hasVisitorId: window.pendo && window.pendo.get_visitor_id ? window.pendo.get_visitor_id() : null,
-                                            pendoMethods: window.pendo ? Object.keys(window.pendo).slice(0, 10) : []
-                                        };
-                                    }
-                                """)
-                                print(f"   🔍 Pendo status: {pendo_info}")
-                            except Exception as e:
-                                print(f"   ⚠️ Could not check Pendo status: {e}")
-                            
-                            print(f"   ⏳ Waited for Pendo initialization")
+                            # Skip Pendo status check in test mode - we only care about selector validation
+                            if not test_mode:
+                                # Check what Pendo objects are available
+                                try:
+                                    pendo_info = await page.evaluate("""
+                                        () => {
+                                            return {
+                                                hasPendo: typeof window.pendo !== 'undefined',
+                                                hasTrack: typeof window.pendo !== 'undefined' && typeof window.pendo.track === 'function',
+                                                hasVisitorId: window.pendo && window.pendo.get_visitor_id ? window.pendo.get_visitor_id() : null,
+                                                pendoMethods: window.pendo ? Object.keys(window.pendo).slice(0, 10) : []
+                                            };
+                                        }
+                                    """)
+                                    print(f"   🔍 Pendo status: {pendo_info}")
+                                except Exception as e:
+                                    print(f"   ⚠️ Could not check Pendo status: {e}")
+                                
+                                print(f"   ⏳ Waited for Pendo initialization")
                             
                         elif step['action'] == 'click':
                             selector = step['selector']
@@ -117,7 +120,7 @@ class Simulator:
                             
                             # Wait for element and check if it exists
                             try:
-                                selector_timeout = 300 if test_mode else 5000  # Allow elements to load
+                                selector_timeout = 1000 if test_mode else 5000  # Allow elements to load
                                 await page.wait_for_selector(selector, timeout=selector_timeout)
                                 element = await page.query_selector(selector)
                                 if element:
@@ -125,11 +128,12 @@ class Simulator:
                                     await page.click(selector)
                                     print(f"   ✅ Click executed: {selector}")
                                     
-                                    # Fast recording - brief wait for click events (no delay division here, keep minimal)
-                                    print(f"   ⏳ Brief wait for Pendo click events...")
-                                    click_wait = 100 if test_mode else 500  # Much faster for test mode
-                                    await page.wait_for_timeout(click_wait)  # Brief wait for event capture
-                                    print(f"   ⏳ Continuing...")
+                                    # Skip Pendo event capture wait in test mode - we only care about selector validation
+                                    if not test_mode:
+                                        print(f"   ⏳ Brief wait for Pendo click events...")
+                                        click_wait = 500  # Wait for event capture
+                                        await page.wait_for_timeout(click_wait)  # Brief wait for event capture
+                                        print(f"   ⏳ Continuing...")
                                 else:
                                     print(f"   ❌ Element not found: {selector}")
                             except Exception as click_error:
@@ -160,14 +164,15 @@ class Simulator:
                             value = step['value']
                             print(f"   → Typing '{value}' into: {selector}")
                             try:
-                                selector_timeout = 300 if test_mode else 5000  # Allow elements to load
+                                selector_timeout = 1000 if test_mode else 5000  # Allow elements to load
                                 await page.wait_for_selector(selector, timeout=selector_timeout)
                                 await page.fill(selector, value)
                                 
-                                # Fast recording - minimal wait for type events
-                                type_wait = 0 if test_mode else 200
-                                await page.wait_for_timeout(type_wait)  # Just 200ms for fast recording
-                                print(f"   ⏳ Brief wait for type events")
+                                # Skip Pendo event capture wait in test mode - we only care about selector validation
+                                if not test_mode:
+                                    type_wait = 200
+                                    await page.wait_for_timeout(type_wait)  # Wait for type events
+                                    print(f"   ⏳ Brief wait for type events")
                             except Exception as type_error:
                                 print(f"   ❌ Type failed: {selector} - {type_error}")
                                 
@@ -184,15 +189,19 @@ class Simulator:
                                 print(f"   📝 Logged action failure for reporting")
                             
                         elif step['action'] == 'wait':
-                            original_delay = step.get('delay_ms', 1000)
-                            recording_delay = max(200, original_delay // 10)  # Divide by 10, minimum 200ms
-                            print(f"   → Waiting {recording_delay}ms (original: {original_delay}ms)")
-                            await page.wait_for_timeout(recording_delay)
+                            # Skip wait steps in test mode - we only care about selector validation
+                            if not test_mode:
+                                original_delay = step.get('delay_ms', 1000)
+                                recording_delay = max(200, original_delay // 10)  # Divide by 10, minimum 200ms
+                                print(f"   → Waiting {recording_delay}ms (original: {original_delay}ms)")
+                                await page.wait_for_timeout(recording_delay)
                         
-                        # Use original delay divided by 10 for fast recording
-                        original_delay = step.get('delay_ms', 1000)
-                        recording_delay = max(100, original_delay // 10)  # Minimum 100ms, divide by 10
-                        await page.wait_for_timeout(recording_delay)
+                        # Skip step delays in test mode - we only care about selector validation
+                        if not test_mode:
+                            # Use original delay divided by 10 for fast recording
+                            original_delay = step.get('delay_ms', 1000)
+                            recording_delay = max(100, original_delay // 10)  # Minimum 100ms, divide by 10
+                            await page.wait_for_timeout(recording_delay)
                         
                     except Exception as e:
                         print(f"❌ Step {i} failed for {path_id}: {e}")
@@ -221,9 +230,9 @@ class Simulator:
                     print(f"   ⏳ Ensuring all network requests are captured...")
                     
                     try:
-                        await page.wait_for_load_state('networkidle', timeout=8000)
+                        await page.wait_for_load_state('networkidle', timeout=15000)
                     except Exception as e:
-                        print(f"   ⚠️ Network timeout (8000ms) - continuing with captured data: {e}")
+                        print(f"   ⚠️ Network timeout (15000ms) - continuing with captured data: {e}")
                         # Don't let network timeout kill the entire function
                 
                 await page.close()

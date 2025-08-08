@@ -139,7 +139,7 @@ class PendoEventInterceptor:
         """Clear captured events"""
         self.captured_events = []
     
-    async def wait_for_events(self, expected_count: int, timeout_seconds: int = 10) -> bool:
+    async def wait_for_events(self, expected_count: int, timeout_seconds: int = 20) -> bool:
         """Wait for a specific number of events to be captured"""
         start_time = datetime.utcnow()
         

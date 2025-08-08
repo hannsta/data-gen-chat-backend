@@ -11,7 +11,7 @@ def test_endpoint(url, endpoint):
     """Test a specific endpoint"""
     full_url = f"{url}{endpoint}"
     try:
-        response = requests.get(full_url, timeout=10)
+        response = requests.get(full_url, timeout=15)
         print(f"✅ {endpoint}: {response.status_code}")
         if response.status_code == 200:
             data = response.json()

@@ -80,7 +80,7 @@ def load_workflow_from_file(filepath: str) -> Optional[Dict[str, Any]]:
 def check_backend_health(backend_url: str) -> bool:
     """Check if backend is available"""
     try:
-        res = requests.get(f"{backend_url}/health", timeout=5)
+        res = requests.get(f"{backend_url}/health", timeout=10)
         return res.status_code == 200
     except Exception as e:
         print(f"❌ Backend not reachable: {e}")
@@ -222,7 +222,7 @@ def sync_run_workflow(workflow_file: str,
         response = requests.post(
             f"{backend_url}/execute_workflow",
             json=request_data,
-            timeout=600 if not test_mode else 300  # 5 minutes for test mode
+            timeout=600 if not test_mode else 600  # 10 minutes for test mode
         )
         
         if response.status_code == 200:

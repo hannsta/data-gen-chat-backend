@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: Pendo Data Generation API
   description: |
@@ -24,14 +24,13 @@ info:
     name: Pendo Solutions Engineering
 
 servers:
-  - url: http://localhost:8000
-    description: Local development server
-  - url: https://your-backend-domain.com
-    description: Production server
+  - url: https://data-gen-chat-backend-production.up.railway.app
+    description: Production server on Railway
 
 paths:
   /:
     get:
+      operationId: getApiInfo
       summary: API information and available endpoints
       description: Returns basic API information and list of available endpoints
       responses:
@@ -56,6 +55,7 @@ paths:
 
   /health:
     get:
+      operationId: getHealth
       summary: Health check endpoint
       description: Returns the health status of the API and confirms stateless mode
       responses:
@@ -78,25 +78,13 @@ paths:
 
   /execute_workflow:
     post:
+      operationId: executeWorkflow
       summary: Execute workflow simulation
       description: |
-        **Single endpoint for both validation and execution**
-        
-        **Two modes:**
-        - `test_mode=true`: Fast validation of selectors (~30-60 seconds)
-          - Tests all selectors without full user simulation
-          - Returns validation results and failed actions
-          - Perfect for debugging workflows
-        
-        - `test_mode=false`: Full execution with user simulation
-          - Runs complete user journeys with specified user count
-          - Captures real Pendo events via browser automation
-          - Returns execution metrics and performance data
-        
-        **Stateless Operation:**
-        - No database dependencies
-        - Results returned immediately in response
-        - Failed actions included in response for analysis
+        Single endpoint for validation and execution. Two modes:
+        - test_mode=true: Fast selector validation (~30-60s)
+        - test_mode=false: Full execution with user simulation
+        Stateless operation with results returned immediately.
         
       requestBody:
         required: true

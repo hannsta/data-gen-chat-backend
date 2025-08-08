@@ -88,7 +88,11 @@ class Simulator:
                                 # In test mode, just wait for DOM to be ready
                                 await page.wait_for_load_state('domcontentloaded')
                             
-                            # Extra wait to ensure Pendo is fully loaded
+                            # Always wait a couple seconds after navigation for page stability
+                            print(f"   ⏳ Waiting for page to stabilize after navigation...")
+                            await page.wait_for_timeout(2000)  # 2 second wait after navigate
+                            
+                            # Extra wait to ensure Pendo is fully loaded (only in normal mode)
                             # Skip Pendo initialization wait in test mode - we only care about selector validation
                             if not test_mode:
                                 pendo_wait = 3000  # Allow Pendo to initialize
@@ -121,12 +125,62 @@ class Simulator:
                             # Wait for element and check if it exists
                             try:
                                 selector_timeout = 1000 if test_mode else 5000  # Allow elements to load
-                                await page.wait_for_selector(selector, timeout=selector_timeout)
+                                
+                                # First try to wait for the element to be visible (better for dropdowns)
+                                try:
+                                    await page.wait_for_selector(selector, state='visible', timeout=selector_timeout)
+                                except:
+                                    # Fallback to just checking if element exists (for hidden elements)
+                                    await page.wait_for_selector(selector, timeout=selector_timeout)
                                 element = await page.query_selector(selector)
                                 if element:
                                     print(f"   ✅ Element found: {selector}")
+                                    
+                                    # Check if this might be a dropdown trigger by looking for common dropdown indicators
+                                    is_dropdown_trigger = await page.evaluate(f"""
+                                        (selector) => {{
+                                            const element = document.querySelector(selector);
+                                            if (!element) return false;
+                                            
+                                            // Check for common dropdown indicators
+                                            const text = element.textContent || '';
+                                            const classes = element.className || '';
+                                            const role = element.getAttribute('role') || '';
+                                            const ariaExpanded = element.getAttribute('aria-expanded');
+                                            
+                                            return (
+                                                classes.includes('dropdown') ||
+                                                classes.includes('select') ||
+                                                classes.includes('menu') ||
+                                                role === 'button' ||
+                                                role === 'combobox' ||
+                                                ariaExpanded !== null ||
+                                                element.tagName === 'SELECT'
+                                            );
+                                        }}
+                                    """, selector)
+                                    
+                                    # Scroll element into view before clicking (helps with dropdowns)
+                                    await page.evaluate(f"""
+                                        (selector) => {{
+                                            const element = document.querySelector(selector);
+                                            if (element) {{
+                                                element.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+                                            }}
+                                        }}
+                                    """, selector)
+                                    
+                                    # Small wait after scrolling
+                                    await page.wait_for_timeout(100)
+                                    
                                     await page.click(selector)
                                     print(f"   ✅ Click executed: {selector}")
+                                    
+                                    # If this looks like a dropdown trigger, wait a bit longer for the dropdown to appear
+                                    if is_dropdown_trigger:
+                                        print(f"   🔽 Detected potential dropdown - waiting for menu to appear...")
+                                        dropdown_wait = 300 if test_mode else 800
+                                        await page.wait_for_timeout(dropdown_wait)
                                     
                                     # Skip Pendo event capture wait in test mode - we only care about selector validation
                                     if not test_mode:

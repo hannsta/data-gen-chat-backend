@@ -12,6 +12,7 @@ class StepAction(str, Enum):
     NAVIGATE = "navigate"
     SCROLL = "scroll"
     HOVER = "hover"
+    SELECT = "select"
 
 class SimulationStep(BaseModel):
     action: StepAction = Field(..., description="Action to perform")

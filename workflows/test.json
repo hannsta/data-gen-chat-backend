@@ -1,0 +1,26 @@
+{
+    "workflow_name": "signature_aviation_service_booking",
+    "description": "Simulates typical user behavior for Signature Aviation's private aviation booking platform, focusing on the multi-airport comparison path.",
+    "user_journey_paths": [
+      {
+        "path_id": "multi_airport_comparison",
+        "percentage": 100.0,
+        "description": "User compares details of multiple airports with proper waits for page-specific elements.",
+        "steps": [
+          {"action": "navigate", "value": "/locations", "delay_ms": 1600, "description": "Open locations page"},
+          {"action": "type", "selector": "[data-pendo-id='location-search-input']", "value": "NY", "delay_ms": 2000, "description": "Filter locations"},
+          {"action": "click", "selector": "[data-pendo-id='location-card-JFK']", "delay_ms": 1200, "description": "View JFK card"},
+          {"action": "click", "selector": "[data-pendo-id='view-location-JFK']", "delay_ms": 1200, "description": "View JFK details"},
+          {"action": "navigate", "value": "/locations", "delay_ms": 1600, "description": "Return to locations"},
+          {"action": "click", "selector": "[data-pendo-id='location-card-EWR']", "delay_ms": 1200, "description": "View EWR card"},
+          {"action": "click", "selector": "[data-pendo-id='view-location-EWR']", "delay_ms": 1200, "description": "View EWR details"}
+        ]
+      }
+    ],
+    "metadata": {
+      "total_paths": 1,
+      "estimated_avg_duration_ms": 20000,
+      "focus": "multi_airport_comparison_timing_fix"
+    }
+  }
+  

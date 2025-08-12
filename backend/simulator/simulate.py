@@ -13,6 +13,98 @@ class Simulator:
     
     def __init__(self):
         pass
+    
+    async def _smart_wait_for_dynamic_content(self, page, path: str, test_mode: bool = False):
+        """Automatically wait for dynamic content based on the navigation path"""
+        
+        # Define path-specific selectors that commonly need extra loading time
+        dynamic_content_selectors = {
+            '/locations': [
+                '[data-pendo-id="locations-grid"]',
+                '[data-pendo-id="location-search-input"]',
+                '[data-pendo-id="location-cards-container"]'
+            ],
+            '/dashboard': [
+                '[data-pendo-id="dashboard-metrics"]',
+                '[data-pendo-id="chart-container"]'
+            ],
+            '/shipments': [
+                '[data-pendo-id="shipments-table"]',
+                '[data-pendo-id="table-header-status"]'
+            ],
+            '/reports': [
+                '[data-pendo-id="reports-grid"]',
+                '[data-pendo-id="report-filters"]'
+            ]
+        }
+        
+        # Check if this path has known dynamic content
+        selectors_to_wait_for = []
+        for known_path, selectors in dynamic_content_selectors.items():
+            if path.startswith(known_path):
+                selectors_to_wait_for = selectors
+                break
+        
+        if not selectors_to_wait_for:
+            print(f"   ℹ️ No known dynamic content for path: {path}")
+            return
+        
+        print(f"   🎯 Smart wait: Checking for dynamic content on {path}")
+        
+        # Progressive timeout strategy
+        base_timeout = 2000 if test_mode else 4000
+        max_timeout = 5000 if test_mode else 8000
+        
+        for selector in selectors_to_wait_for:
+            try:
+                print(f"   ⏳ Waiting for dynamic element: {selector}")
+                await page.wait_for_selector(selector, state='visible', timeout=base_timeout)
+                print(f"   ✅ Found dynamic element: {selector}")
+                return  # Found at least one key element, we're good
+                
+            except Exception as e:
+                print(f"   ⏸️ Element not found with base timeout: {selector}")
+                
+                # Try with longer timeout for this specific selector
+                try:
+                    print(f"   ⏳ Retrying with extended timeout: {selector}")
+                    await page.wait_for_selector(selector, state='visible', timeout=max_timeout - base_timeout)
+                    print(f"   ✅ Found dynamic element (extended wait): {selector}")
+                    return  # Found it with extended timeout
+                    
+                except Exception as extended_error:
+                    print(f"   ⚠️ Still not found: {selector} - continuing to next selector")
+                    continue
+        
+        # If we get here, none of the expected selectors were found
+        print(f"   ⚠️ No expected dynamic elements found for {path} - page may still be loading")
+        
+        # Fall back to a reasonable wait time
+        fallback_wait = 1000 if test_mode else 2000
+        print(f"   ⏳ Fallback wait: {fallback_wait}ms for dynamic content to load")
+        await page.wait_for_timeout(fallback_wait)
+    
+    def _is_dynamic_selector(self, selector: str) -> bool:
+        """Check if a selector is likely to be dynamically loaded content"""
+        dynamic_patterns = [
+            'location-card',
+            'location-search',
+            'locations-grid',
+            'table-header',
+            'shipments-table',
+            'dashboard-metrics',
+            'chart-container',
+            'reports-grid',
+            'report-filters',
+            'view-details',
+            'data-grid',
+            'search-results',
+            'filter-dropdown',
+            'dynamic-content'
+        ]
+        
+        selector_lower = selector.lower()
+        return any(pattern in selector_lower for pattern in dynamic_patterns)
         
     async def simulate_session(self, request: SessionRequest) -> SimulationResponse:
         """Execute a single user session (for testing individual paths)"""
@@ -78,7 +170,12 @@ class Simulator:
                         print(f"🎬 Recording {path_id} - Step {i}: {step.get('description', step['action'])}")
                         
                         if step['action'] == 'navigate':
-                            url = f"{app_url}{step['value']}"
+                            # Properly handle URL concatenation to avoid double slashes
+                            base_url = app_url.rstrip('/')  # Remove trailing slash from base URL
+                            path = step['value']
+                            if not path.startswith('/'):
+                                path = '/' + path  # Ensure path starts with slash
+                            url = f"{base_url}{path}"
                             print(f"   → Navigating to: {url}")
                             await page.goto(url)
                             if not test_mode:
@@ -88,9 +185,13 @@ class Simulator:
                                 # In test mode, just wait for DOM to be ready
                                 await page.wait_for_load_state('domcontentloaded')
                             
-                            # Always wait a couple seconds after navigation for page stability
+                            # Always wait for page stability after navigation - increased for dynamic content
                             print(f"   ⏳ Waiting for page to stabilize after navigation...")
-                            await page.wait_for_timeout(2000)  # 2 second wait after navigate
+                            stabilization_wait = 2000  # Back to original 2 second wait
+                            await page.wait_for_timeout(stabilization_wait)
+                            
+                            # Smart wait for dynamic content based on the path
+                            await self._smart_wait_for_dynamic_content(page, step['value'], test_mode)
                             
                             # Extra wait to ensure Pendo is fully loaded (only in normal mode)
                             # Skip Pendo initialization wait in test mode - we only care about selector validation
@@ -122,65 +223,35 @@ class Simulator:
                             selector = step['selector']
                             print(f"   → Clicking: {selector}")
                             
+                            # Check if previous step was navigate and this selector might need extra time
+                            previous_step = steps[i-2] if i > 1 else None
+                            needs_extra_wait = (previous_step and 
+                                              previous_step.get('action') == 'navigate' and
+                                              self._is_dynamic_selector(selector))
+                            
                             # Wait for element and check if it exists
                             try:
-                                selector_timeout = 1000 if test_mode else 5000  # Allow elements to load
+                                # Use step-level timeout_ms if provided, otherwise use smart defaults
+                                step_timeout = step.get('timeout_ms')
+                                if step_timeout:
+                                    selector_timeout = step_timeout
+                                elif needs_extra_wait:
+                                    selector_timeout = 5000 if test_mode else 8000  # Back to original values
+                                    print(f"   🎯 Using extended timeout for post-navigation dynamic element")
+                                else:
+                                    selector_timeout = 3000 if test_mode else 5000  # Standard timeout
                                 
-                                # First try to wait for the element to be visible (better for dropdowns)
-                                try:
-                                    await page.wait_for_selector(selector, state='visible', timeout=selector_timeout)
-                                except:
-                                    # Fallback to just checking if element exists (for hidden elements)
-                                    await page.wait_for_selector(selector, timeout=selector_timeout)
+                                print(f"   ⏳ Waiting for selector with {selector_timeout}ms timeout...")
+                                await page.wait_for_selector(selector, timeout=selector_timeout)
                                 element = await page.query_selector(selector)
                                 if element:
                                     print(f"   ✅ Element found: {selector}")
-                                    
-                                    # Check if this might be a dropdown trigger by looking for common dropdown indicators
-                                    is_dropdown_trigger = await page.evaluate(f"""
-                                        (selector) => {{
-                                            const element = document.querySelector(selector);
-                                            if (!element) return false;
-                                            
-                                            // Check for common dropdown indicators
-                                            const text = element.textContent || '';
-                                            const classes = element.className || '';
-                                            const role = element.getAttribute('role') || '';
-                                            const ariaExpanded = element.getAttribute('aria-expanded');
-                                            
-                                            return (
-                                                classes.includes('dropdown') ||
-                                                classes.includes('select') ||
-                                                classes.includes('menu') ||
-                                                role === 'button' ||
-                                                role === 'combobox' ||
-                                                ariaExpanded !== null ||
-                                                element.tagName === 'SELECT'
-                                            );
-                                        }}
-                                    """, selector)
-                                    
-                                    # Scroll element into view before clicking (helps with dropdowns)
-                                    await page.evaluate(f"""
-                                        (selector) => {{
-                                            const element = document.querySelector(selector);
-                                            if (element) {{
-                                                element.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
-                                            }}
-                                        }}
-                                    """, selector)
-                                    
-                                    # Small wait after scrolling
-                                    await page.wait_for_timeout(100)
-                                    
                                     await page.click(selector)
                                     print(f"   ✅ Click executed: {selector}")
                                     
-                                    # If this looks like a dropdown trigger, wait a bit longer for the dropdown to appear
-                                    if is_dropdown_trigger:
-                                        print(f"   🔽 Detected potential dropdown - waiting for menu to appear...")
-                                        dropdown_wait = 300 if test_mode else 800
-                                        await page.wait_for_timeout(dropdown_wait)
+                                    # Brief wait after click for any UI updates (like dropdowns opening)
+                                    brief_wait = 200 if test_mode else 400
+                                    await page.wait_for_timeout(brief_wait)
                                     
                                     # Skip Pendo event capture wait in test mode - we only care about selector validation
                                     if not test_mode:
@@ -191,15 +262,22 @@ class Simulator:
                                 else:
                                     print(f"   ❌ Element not found: {selector}")
                             except Exception as click_error:
-                                print(f"   ❌ Click failed: {selector} - {click_error}")
+                                error_msg = str(click_error)
+                                print(f"   ❌ Click failed: {selector} - {error_msg}")
+                                
+                                # Suggest wait_for_selector for timeout issues
+                                if "timeout" in error_msg.lower():
+                                    print(f"   💡 Suggestion: Use wait_for_selector action before clicking {selector}")
+                                    print(f"   💡 Or increase timeout_ms parameter for this step")
                                 
                                 # Log the failed action
                                 failure_entry = {
                                     'step': i,
                                     'selector': selector,
-                                    'error': str(click_error),
+                                    'error': error_msg,
                                     'description': step.get('description', 'No description'),
-                                    'action': 'click'
+                                    'action': 'click',
+                                    'suggestion': 'Consider using wait_for_selector action or increasing timeout_ms' if 'timeout' in error_msg.lower() else None
                                 }
                                 failed_actions_log[path_id].append(failure_entry)
                                 print(f"   📝 Logged action failure for reporting")
@@ -217,8 +295,25 @@ class Simulator:
                             selector = step['selector']
                             value = step['value']
                             print(f"   → Typing '{value}' into: {selector}")
+                            
+                            # Check if previous step was navigate and this selector might need extra time
+                            previous_step = steps[i-2] if i > 1 else None
+                            needs_extra_wait = (previous_step and 
+                                              previous_step.get('action') == 'navigate' and
+                                              self._is_dynamic_selector(selector))
+                            
                             try:
-                                selector_timeout = 1000 if test_mode else 5000  # Allow elements to load
+                                # Use step-level timeout_ms if provided, otherwise use smart defaults
+                                step_timeout = step.get('timeout_ms')
+                                if step_timeout:
+                                    selector_timeout = step_timeout
+                                elif needs_extra_wait:
+                                    selector_timeout = 5000 if test_mode else 8000  # Back to original values
+                                    print(f"   🎯 Using extended timeout for post-navigation dynamic element")
+                                else:
+                                    selector_timeout = 3000 if test_mode else 5000  # Standard timeout
+                                
+                                print(f"   ⏳ Waiting for selector with {selector_timeout}ms timeout...")
                                 await page.wait_for_selector(selector, timeout=selector_timeout)
                                 await page.fill(selector, value)
                                 
@@ -228,20 +323,64 @@ class Simulator:
                                     await page.wait_for_timeout(type_wait)  # Wait for type events
                                     print(f"   ⏳ Brief wait for type events")
                             except Exception as type_error:
-                                print(f"   ❌ Type failed: {selector} - {type_error}")
+                                error_msg = str(type_error)
+                                print(f"   ❌ Type failed: {selector} - {error_msg}")
+                                
+                                # Suggest wait_for_selector for timeout issues
+                                if "timeout" in error_msg.lower():
+                                    print(f"   💡 Suggestion: Use wait_for_selector action before typing into {selector}")
+                                    print(f"   💡 Or increase timeout_ms parameter for this step")
                                 
                                 # Log the failed action
                                 failure_entry = {
                                     'step': i,
                                     'selector': selector,
-                                    'error': str(type_error),
+                                    'error': error_msg,
                                     'description': step.get('description', 'No description'),
                                     'action': 'type',
-                                    'value': value
+                                    'value': value,
+                                    'suggestion': 'Consider using wait_for_selector action or increasing timeout_ms' if 'timeout' in error_msg.lower() else None
                                 }
                                 failed_actions_log[path_id].append(failure_entry)
                                 print(f"   📝 Logged action failure for reporting")
                             
+                        elif step['action'] == 'wait_for_selector':
+                            selector = step['selector']
+                            # Use step-level timeout_ms if provided, otherwise use defaults
+                            step_timeout = step.get('timeout_ms')
+                            if step_timeout:
+                                selector_timeout = step_timeout
+                            else:
+                                selector_timeout = 3000 if test_mode else 8000  # Longer timeout for explicit waits
+                            
+                            print(f"   → Waiting for selector to be visible: {selector} (timeout: {selector_timeout}ms)")
+                            try:
+                                await page.wait_for_selector(selector, state='visible', timeout=selector_timeout)
+                                print(f"   ✅ Selector found and visible: {selector}")
+                            except Exception as wait_error:
+                                print(f"   ❌ Wait for selector failed: {selector} - {wait_error}")
+                                
+                                # Log the failed action
+                                failure_entry = {
+                                    'step': i,
+                                    'selector': selector,
+                                    'error': str(wait_error),
+                                    'description': step.get('description', 'No description'),
+                                    'action': 'wait_for_selector'
+                                }
+                                failed_actions_log[path_id].append(failure_entry)
+                                print(f"   📝 Logged action failure for reporting")
+                                
+                                # Try to list available elements for debugging
+                                elements = await page.query_selector_all("[data-pendo-id]")
+                                if elements:
+                                    print(f"   🔍 Available data-pendo-id elements:")
+                                    for elem in elements[:5]:  # Show first 5
+                                        pendo_id = await elem.get_attribute("data-pendo-id")
+                                        tag = await elem.evaluate("el => el.tagName")
+                                        print(f"      - [{tag.lower()}][data-pendo-id='{pendo_id}']")
+                                continue
+                        
                         elif step['action'] == 'wait':
                             # Skip wait steps in test mode - we only care about selector validation
                             if not test_mode:
@@ -349,6 +488,10 @@ class Simulator:
                 
                 if 'value' in failure:
                     print(f"   Value: '{failure['value']}'")
+                
+                if 'suggestion' in failure and failure['suggestion']:
+                    print(f"   💡 Suggestion: {failure['suggestion']}")
+                
                 print()
         
         print("💡 Failed actions are available in the API response for analysis!")

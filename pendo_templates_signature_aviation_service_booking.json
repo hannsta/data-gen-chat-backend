@@ -1,0 +1,1112 @@
+{
+  "multi_airport_comparison": [
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 1,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096364237",
+        "jzb": "eJzVUsuO2kAQ_BXkM_j1AMMpSHkIRdnEImxCoshq7AZGGs-YmbFZhPj37eHh3UMS5ZBIG064q6e6uqq_Hx1zqNGZOKxEYdj64PSdlZJ7jSo3rCIkGCWJPx5GwziM4r7TMs2MVDkr6VGJlRw01Dvw_YBeQlHIRpgLqNlGgGkUDqBlYJgUA9tPbY3ihG-NqfXE82oUpXzq0Vu5L0Cjy2ULK44u1LXHZXFGNb2ulay1Mzk6kpf584mi4fxvCDzRDFBkx2dYzTpec_lw3uzrGr8Oxbf2YZvNMkGsawUVnsH3fDNrlodqvsym6zTZEahRa6I-w8Afgo_t6j5eNLO75bvCemEqu0uxBSHQ2vKaKSyMFaFx16AoKAOfQjkYpK3jMD71u9AqNPDbwJIXFdhViv37UzVYAbODbP1Vp-Y2yC1kZc2mNHJBhluvqLG3IAKqcxCbBja2jCJfzK2D1_W6gb_e8Eo4vzX0pteGnp3xdBLTjpFKJRj7KIg8P_VCP0yIqEVl46Zy6IZp6gY5rV_-w5va7bK7D5l4yz_hnn25j_70poLuppI0enZTXEL5H92UlXsTGY1iNxxffiM_GKcvz_Wwcz0aBqcfjxUK16c"
+      },
+      "decoded_events": [
+        {
+          "type": "identify",
+          "browser_time": 1755096364234,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "old_account_id": null,
+            "visitor_id": "demo-user-001",
+            "account_id": "signature-aviation-demo"
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "alx1OvbV4UuINYGc",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 0,
+          "bytes": 424
+        },
+        {
+          "type": "meta",
+          "browser_time": 1755096364235,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "visitor": {
+              "id": "demo-user-001",
+              "email": "demo@signatureaviation.com",
+              "full_name": "Demo User",
+              "language": "en_US"
+            },
+            "account": {
+              "id": "signature-aviation-demo",
+              "name": "Signature Aviation Demo"
+            },
+            "parentAccount": {},
+            "date": "13/08/2025",
+            "version": "2.288.1_prod"
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 1,
+          "bytes": 583
+        },
+        {
+          "type": "load",
+          "browser_time": 1755096364235,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "load_time": 1374.2999999970198
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 2,
+          "bytes": 361
+        }
+      ],
+      "timing_delay_ms": 1600
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 1,
+      "base_url": "https://data.pendo.io/data/guide.json/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "id": "21",
+        "jzb": "eJx1j71uwzAMhF_F0BzLP0UBw1MDdOkcpKvBWqwjQBIF_bhD4XcPFSTO0m7E8ePd8VesOupE4UOJUSi0VOeIoW7bThwEzDNll267qBcHKQesYdWQNLm64EzlYHh_ScnHsWk8OkVPJl7oZ4aI0tAKXwYleN8Ymm_byNdk1OezgsvGHITFBAoSiHHvV0b9V0e0oEt-0d_2ko98OZNl6JttJwcWGXxnsDqzAesG3JJhKTK66XwS2_70Hvj_43fD0wOojnegKhnFy0NAl467I0v8VznqXpp2aPq2f2WjFUPkM5Z72Q-D7CYfSIltuwKKBI2G",
+        "v": "2.288.1_prod",
+        "ct": "1755096364238"
+      },
+      "decoded_events": [
+        {
+          "visitorId": "demo-user-001",
+          "accountId": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "oldVisitorId": null,
+          "metadata": {
+            "visitor": {
+              "id": "demo-user-001",
+              "email": "demo@signatureaviation.com",
+              "full_name": "Demo User",
+              "language": "en_US"
+            },
+            "account": {
+              "id": "signature-aviation-demo",
+              "name": "Signature Aviation Demo"
+            },
+            "parentAccount": {},
+            "date": "13/08/2025",
+            "version": "2.288.1_prod"
+          }
+        }
+      ],
+      "timing_delay_ms": 1600
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 1,
+      "base_url": "https://data.pendo.io/data/guide.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "jzb": "eJwFwIEIAAAAwDDQd3-N1QABFQC5",
+        "ct": "1755096364239",
+        "v": "2.288.1_prod"
+      },
+      "decoded_events": [],
+      "timing_delay_ms": 1600
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 4,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096375805",
+        "jzb": "eJztlV9v2zYQwL8Koecwkew4afzWIS3mFetqrOuWFUVAkyeJKEUy5Ml_MOS79ygpdtK0gxEgQB7sB9vHO_L-8sfP_2W48ZBNs9LJNmZH2SK4VYRwjbqh5eJ8Mskvzsbno_OiOMqWOmp04Vor2qGgcbwlW57nBe0UUrrWYq-MurIC2wBcLLVA7SxP9mTWBkP6GtHH6cmJB6vczibWbiVFhGPjlmJh4Fh4f2Kc7LQpPB-cj9mUwhahAuz_VXTg7P2Hvz6SQeedfqUhs6w0sGY1L3K24mVrDAsUogLFG8UWLigIww_X1rfIFhVfCPm16syYX_Mx8xs-YghrJE0EFrStuCvLCGlha1pqA9PhqHyQKo5B2OhFAIv9WndObHqhdBZ5A0q3w0KnLV2AO_9GSKidoUN7XdMixX7PousaT22hYk1di0Zb4NZZ-E7VhT360WL6-tH6kOOIKR1TK9RUtiG6QKcjF8a4FaidznkhNW74JGeN2qbpDZWemoEaDU2TpQ7QnCCG1MLbo6zZzKgba5ozalitjdqJuKbmpkb25XtjoNk1-3L26VGrAxiakiWwRqz5ihq8j9_RQ78k7uuuWfBX-3jIH3ogcV8PksZDUDsDa9ZctOjSPJ6medzL8eOS7p2atrzmUQYA-_BGPEtJg3O49f2EzH5S0l_-uLx6lNoTEihuh8-dm49iMaND-wOwF7I3K-_hnzP773Jdz2dzS47KIBrolO9MNWuvNs2fV_PX5avJDSkjxEhI69Q3N_P3v8_tW_MBVvrvT-MESewykbWwFhIvL3UAiRkFEeGmBSsphTHReoNA8Ren5_nt0ZblaVsFP4f5-Ozi9ADzA8wPMD_A_ADzlwFzAvIO5sV9mBstv_4vyycvmuW_phJ8B_LEygiNXhAOGV2-0dMuX4-V31xt2dtj9g6ovGrDZhYhUI4UmDDstQ7ehTST-94Yz8-YR_5E1O1NuOHtMtX27aq4FEH1z1P6d_9tiLVQbpUwXLslvSCDTLu7Z0kPTUqLbEC7dzpV4nm5VgWtWPri0pnIi_Rg7MQRM9U9ccwqQdV93sIeSPuiSEvoNKIi48-ZgRKzLy-QvQTQO_aOL_LbL98A3yKqYA"
+      },
+      "decoded_events": [
+        {
+          "type": "focus",
+          "browser_time": 1755096372711,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "INPUT",
+              "id": "",
+              "cls": "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10",
+              "title": null,
+              "attrs": {},
+              "myIndex": 1,
+              "childIndex": 1,
+              "txt": "",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "relative max-w-md",
+                "title": null,
+                "attrs": {},
+                "myIndex": 2,
+                "childIndex": 2,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "mb-8",
+                  "title": null,
+                  "attrs": {},
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "container mx-auto px-4 py-8",
+                    "title": null,
+                    "attrs": {},
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "min-h-screen bg-background",
+                      "title": null,
+                      "attrs": {},
+                      "myIndex": 2,
+                      "childIndex": 2,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "root",
+                        "cls": "",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 1,
+                        "childIndex": 0,
+                        "parentElem": {
+                          "tag": "BODY",
+                          "id": "",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 2,
+                          "childIndex": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 3,
+          "bytes": 1470
+        },
+        {
+          "type": "change",
+          "browser_time": 1755096373694,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "INPUT",
+              "id": "",
+              "cls": "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10",
+              "title": null,
+              "attrs": {},
+              "myIndex": 1,
+              "childIndex": 1,
+              "txt": "",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "relative max-w-md",
+                "title": null,
+                "attrs": {},
+                "myIndex": 2,
+                "childIndex": 2,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "mb-8",
+                  "title": null,
+                  "attrs": {},
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "container mx-auto px-4 py-8",
+                    "title": null,
+                    "attrs": {},
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "min-h-screen bg-background",
+                      "title": null,
+                      "attrs": {},
+                      "myIndex": 2,
+                      "childIndex": 2,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "root",
+                        "cls": "",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 1,
+                        "childIndex": 0,
+                        "parentElem": {
+                          "tag": "BODY",
+                          "id": "",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 2,
+                          "childIndex": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 4,
+          "bytes": 1471
+        },
+        {
+          "type": "click",
+          "browser_time": 1755096373695,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "H3",
+              "id": "",
+              "cls": "font-semibold mb-2",
+              "title": null,
+              "attrs": {},
+              "myIndex": 0,
+              "childIndex": 0,
+              "txt": "John F. Kennedy International Airport",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {},
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {},
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {},
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "flags": [
+                "left"
+              ]
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 5,
+          "bytes": 1390
+        }
+      ],
+      "timing_delay_ms": 1200
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 5,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096376614",
+        "jzb": "eJztVd9v2zYQ_lcIPewpTGQ7lhO_rUgLeMXSGcuyZUEQ0NRJ4kKRDHnyjw3533uU_KttimUBivXBepB1vCPvvruP_m7_SXDlIBknhZVNSI6SmbeLAP4eVU3LvdFwmJ5ng1E2HJ0eJXMVFFp_r3LakUNteUOxPE17tFNIaRuDnTOo0ghsPHAxVwKVNTzGU1jjNfkrRBfGJycOTG53MaGyCykCHGs7FzMNx8K5E21l643lOW9dSMZUtvAlYPdV0oFvfru6-nBJEW16-pWa4hJltDLACw1LphDqwCUYBM_-agKqYrUxS-F4ny0qiglOSODGLrxwzBOkHHJe5wxhiTzUrLAGeQ25amrmlSm5LYoAyGdCPpRtPEMvDHUqIpJWWx9oE7WXx_4RqrFtsC3LWAOfudoT-88txtdz6-v0fZarEHuWj51VERSHOYELXZat0xI8hSs-TNntD_dhXt49G7_xBfU38NOdWVHOB56yWbmbmhHzVdeetoGssnPw488jeC78A6t4L2VuSUe6Vew4LxqtaVyoUBPhDFlEJUQfp_x0lNSrCQ1gmYz7NNJK6Xxn4pLmn1wrWLALQKFo4EQQ4QnEWw31jhsXk-sviOF4xhzy9CWpe5-mJvOlWTb00SWbWZ8T0agrUvg1m-IXL6yHNW9CJXK7iCTrWri2afceo7pFJhsfrOfr2b0ERvopDDJfCqP0KmfxFekceI_V-Xhn9pku98xBe5myb9tYSZdQ0BXyrF5y0aDdcurs2yauleEVD9IDmDjM3a1_HYn_Ja-3Fre5X4HsK0N-8-Hi5gtorwDQe9o8mzxXYjahU7sTsDOStwvn4I_M_DlfVtPJ1FCmwosaWud7XU6am1X96830x-Js-EjOACEQ1Vv34-P08uepead_gYX6_XoQJQRbKLISxkBUkwvlQWJCRQR4bMBIwpCRlq3o37wVsezpaKt0Uiv5cFC6g9IdlO6gdAelOyjdf1I6Ui4tSgq-TTQUmNx9h9I32pO-0WBP-rQVcXhfU76sR6D_H-UTyjvr8eSnd-_3tS8WvClzMDo97p93zyjtnZ99f40_2zZ-kA2e7j4Cx7wnVg"
+      },
+      "decoded_events": [
+        {
+          "type": "focus",
+          "browser_time": 1755096376574,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "BUTTON",
+              "id": "",
+              "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-aviation-navy text-white hover:bg-aviation-navy-dark h-10 px-4 py-2 w-full",
+              "title": null,
+              "attrs": {},
+              "myIndex": 2,
+              "childIndex": 2,
+              "txt": "View Details",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {},
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {},
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {},
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 6,
+          "bytes": 1756
+        },
+        {
+          "type": "click",
+          "browser_time": 1755096376574,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "BUTTON",
+              "id": "",
+              "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-aviation-navy text-white hover:bg-aviation-navy-dark h-10 px-4 py-2 w-full",
+              "title": null,
+              "attrs": {},
+              "myIndex": 2,
+              "childIndex": 2,
+              "txt": "View Details",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {},
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {},
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {},
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "flags": [
+                "left"
+              ]
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 7,
+          "bytes": 1773
+        },
+        {
+          "type": "load",
+          "browser_time": 1755096376612,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/airport/JFK",
+          "props": {
+            "load_time": 1374.2999999970198
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "KlgIuYymSYQAf85q",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 8,
+          "bytes": 363
+        }
+      ],
+      "timing_delay_ms": 1200
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 5,
+      "base_url": "https://data.pendo.io/data/guide.json/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "id": "23",
+        "jzb": "eJx1j01rwzAMhv9K8Lmxk4xByGmFMdh2LN01aLHWGhzL-CM7jPz3yqNNL9vNvH706tGPWEw0icKrFoPQOFOdI4a6aVqxEzBNlF36_Yvm5CDlgDUsBpIhVxecqRws_59T8nFQyqPTdGfimb4niCgtLfBpUYL3CkzwFJJ6e3nnebL64y7hsrU7MWMCDQnEsBmWp_nLEmcwxaDkT5vmzUBONDP0xbWjgxkZfGawOnIB5xbcKcOpxOjG40Gs29nbwv9PvxYebkC1vwJV2VG6PAR0ab81csR3laH2QTW96prukYsWDJHHOO5k1_eyHX0gLdb1AivjjcU",
+        "v": "2.288.1_prod",
+        "ct": "1755096376614"
+      },
+      "decoded_events": [
+        {
+          "visitorId": "demo-user-001",
+          "accountId": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/airport/JFK",
+          "oldVisitorId": null,
+          "metadata": {
+            "visitor": {
+              "id": "demo-user-001",
+              "email": "demo@signatureaviation.com",
+              "full_name": "Demo User",
+              "language": "en_US"
+            },
+            "account": {
+              "id": "signature-aviation-demo",
+              "name": "Signature Aviation Demo"
+            },
+            "parentAccount": {},
+            "date": "13/08/2025",
+            "version": "2.288.1_prod"
+          }
+        }
+      ],
+      "timing_delay_ms": 1200
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 8,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096380035",
+        "jzb": "eJxFkF9rwjAUxb9LnltNV7TWt4GOuaGsm2wyEYntdQ2kScyfdiJ-d2_jYHlLfufcnHO3F-LOGsiUCMUqEpGDUZ0Fs3e8wdckG41oPk4nlKZpRFpuuVNmzys0VNCo2KM2pjRBJytL5aW7Q8t_JHPeQMxazhxXMu71KPNGIK-d03Y6HGqQlfrX2Fp1JbMwEKplBwEDpvVQqDJQi25tlLZkeglx_0I-ZMkgycOZTGiW0-yKQmZAujU7LDCO9EJExN0vZN5pDZux_G5_62JRSBx7NKyBAN8flx9zcXxuNy-zFZOvAXrrTIiwxl3h91vi195IsouIBWsRBO_pVKyWhXwSb9Dxr8-0b-uaPm1ZMymhLz7jBkpHMKGFkwdZYgGKaz-7fnCa0-vuBoQthlo"
+      },
+      "decoded_events": [
+        {
+          "type": "load",
+          "browser_time": 1755096380033,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "load_time": 271.19999998807907
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "RAMSElfHvXJDNanK",
+          "frustrationTypes": [
+            "uTurn"
+          ],
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 0,
+          "bytes": 390
+        }
+      ],
+      "timing_delay_ms": 1600
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 8,
+      "base_url": "https://data.pendo.io/data/guide.json/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "id": "21",
+        "jzb": "eJx1j71uwzAMhF_F0BzLP0UBw1MDdOkcpKvBWqwjQBIF_bhD4XcPFSTO0m7E8ePd8VesOupE4UOJUSi0VOeIoW7bThwEzDNll267qBcHKQesYdWQNLm64EzlYHh_ScnHsWk8OkVPJl7oZ4aI0tAKXwYleN8Ymm_byNdk1OezgsvGHITFBAoSiHHvV0b9V0e0oEt-0d_2ko98OZNl6JttJwcWGXxnsDqzAesG3JJhKTK66XwS2_70Hvj_43fD0wOojnegKhnFy0NAl467I0v8VznqXpp2aPq2f2WjFUPkM5Z72Q-D7CYfSIltuwKKBI2G",
+        "v": "2.288.1_prod",
+        "ct": "1755096380036"
+      },
+      "decoded_events": [
+        {
+          "visitorId": "demo-user-001",
+          "accountId": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "oldVisitorId": null,
+          "metadata": {
+            "visitor": {
+              "id": "demo-user-001",
+              "email": "demo@signatureaviation.com",
+              "full_name": "Demo User",
+              "language": "en_US"
+            },
+            "account": {
+              "id": "signature-aviation-demo",
+              "name": "Signature Aviation Demo"
+            },
+            "parentAccount": {},
+            "date": "13/08/2025",
+            "version": "2.288.1_prod"
+          }
+        }
+      ],
+      "timing_delay_ms": 1600
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 10,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096391083",
+        "jzb": "eJytVGtPKzcQ_SuWP8eQEJ75RptckfZCG4qAW4SQ157sWnhtM_bmoYr_znj3XgVEq6ZR8yG743mcM3vG8_AXT-sAfMSVNeqZ93iBfhkBn5Kp6XhwcnTUPzsenp6enQx6fGGiSR6fjKYMDbUXDcWKfn9AmVIp37jUOaMpnUwNgpALI5PxTuR4CmvQkr9KKcTR_n4Ap_0mJlZ-qWSEPesXsrCwJ0PYt1613kjZAX2IfES0JZaQureSCl4MydtC01NZiuFz75KIUJvCW83qQhyQK5lkqTHXWEuUU8Jc7bXH6_XUaVjxUZ_SK2P1xkwrwuFXsJT4zL6aAjCt2dQlQGqReEnLzg0GjykTlAguTSzUG27j6e0nckEcs5BEfxtK9OXfUyJzWxQkRTRoYUtWeNSArCiFkqhZglVq38TcI5RtIIuV1H4pYs0qvwAcfbcpO6F0pH2nUT5kqsHoUQRv8pf4pza4lkmKTuWW2g8xO-zJ3TV_3-nwY6dkbttpiUaz_CeUt1EMWK1HG_OA2fKdOWSlJAH-M-koco0PjHfXRtF4SuNIk3olZJM8CytxyMJanO5ALFcj2P-JW22cqERUCODyyBRSPXczss28HnzEJfNfcNH7fHc67B1uBF3Sv0P46bfxt0-t7dDA4LX79fjcypKCH7iFeeKP-agDvpHFlGC6kqkz-GQZAtwfuz8Xq2o2nTmCnqOsoXVen1_-MbHzi8X9L-Mr6X4lZ4QYSczW_fIyu7qcuS_2d1iau9u83ZrU9qYq6RzkJTo2CKqVPMJLA07ljU0rfJ2ASA4Oz8iYYxPp8uYhuaFN35LXIPXP7b5_fH18Ax4Z-jA"
+      },
+      "decoded_events": [
+        {
+          "type": "click",
+          "browser_time": 1755096388971,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "H3",
+              "id": "",
+              "cls": "font-semibold mb-2",
+              "title": null,
+              "attrs": {},
+              "myIndex": 0,
+              "childIndex": 0,
+              "txt": "Newark Liberty International Airport",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {
+                    "data-pendo-id": "location-card-EWR"
+                  },
+                  "myIndex": 3,
+                  "childIndex": 3,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {
+                      "data-pendo-id": "locations-grid"
+                    },
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {
+                        "data-pendo-id": "locations-content"
+                      },
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "flags": [
+                "left"
+              ]
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "RAMSElfHvXJDNanK",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 1,
+          "bytes": 1491,
+          "frustrationTypes": [
+            "deadClick"
+          ]
+        }
+      ],
+      "timing_delay_ms": 1200
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 11,
+      "base_url": "https://data.pendo.io/data/ptm.gif/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "v": "2.288.1_prod",
+        "ct": "1755096391860",
+        "jzb": "eJztV01v4zYQ_SuEDj2FiWRvHNu3XThF3SLZuk3TbYMgoKmRxIYiGZKS7Bb57zuU_JWvNg0KNAf7YGs4Q87Mm0c_--qvyC8NROMo07xy0UE0t7pxYG-8KHE5OTk-jkeD_igZHvcPolo44bW9ESnuSKHUtMJYGscJ7mSc60r5zulErpivLFBWC-aFVjTEY1hlJfoL740bHx0ZUKnexrhCN5w5OJS6ZnMJh8yYI6l56w3lGauNi8ZYNrM5-O4pxwM__XJx8fkcI9r0-MklxkVCSaGAZhIWRHgoHeWgPFjyR-W8yJZrM2eG9khTYIwzjANVurHMEIstpZDSMiUeFp66kmRaeVpCKqqSWKFyqrPMgadzxm_zNp54yxQiFTriWmrrcBPCSwN-2NVYV74tS2kFj1ztib3nFsPbc-ur9D2SChcwS8dGi9AUhRqbc12WjVNje8Iv6XFMrr65cXV-_Wz82ufEn0A_bM0Cc97SmMzz7dQUq5cdPC2ApNA12PHjCJoye0sKmsTELPBIswyI06ySEsflhZdIOIUWUsl72045ZZ7RjiPtXGsBDV3zgZ5NP0b3B1G5nOKMFtG4h1MvhEy3pl8gRaJL3EUm4JlATiCHmMU-TyWUW_pMppdPuGPogBhP45eq202dPEyN5muzrBkmczLXNkUuInCc2RXhwhPNtIUVtVzBUt0EHnYor2zcvUO6bpHwyjpt6Wq8rwZ5g2-b-zHI8cNO0Xxtp7kVKQlv4VI4mpAyHW_NHpH5jtlvr-TgXxftaDjjQcVvnw3Hq87wolpSLiirvN4wd_iGwsJpmPY_qq0UihbUcQugAmW2Xz-v4evTq_IPea3WfpP7DTfiBZ58-jz57Ulrb2gguV-_1nku2HyKp3Yn-M6IThtj4MtA_V4vitl0pjBTZlkJrfOnj2c_n8rsu_rL95Nzpn5ApwPncHat--5udn42U9_KH6ERv172g5b5thVeMKUgyNpEWODthB3cVaA49oCVzpcoK1jkcNS_P9hILpeC3_6t5H7YS-5ecveSu5fcveTuJfe9Si5KqGQ5Bl9FEjIfXb9DDcb_rmsNHiXxjgZLzcLwXpbg0f8lwUxYo60_Cl8GOyIcCl6V2TtJDpNR-xoO45NRfPL-gMdfMCvg-4P-_fVXv7-FMA"
+      },
+      "decoded_events": [
+        {
+          "type": "focus",
+          "browser_time": 1755096391853,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "BUTTON",
+              "id": "",
+              "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-aviation-navy text-white hover:bg-aviation-navy-dark h-10 px-4 py-2 w-full",
+              "title": null,
+              "attrs": {
+                "data-pendo-id": "view-location-MIA"
+              },
+              "myIndex": 2,
+              "childIndex": 2,
+              "txt": "View Details",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {
+                    "data-pendo-id": "location-card-MIA"
+                  },
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {
+                      "data-pendo-id": "locations-grid"
+                    },
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {
+                        "data-pendo-id": "locations-content"
+                      },
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "RAMSElfHvXJDNanK",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 2,
+          "bytes": 1893
+        },
+        {
+          "type": "click",
+          "browser_time": 1755096391854,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/locations",
+          "props": {
+            "target": {
+              "tag": "BUTTON",
+              "id": "",
+              "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-aviation-navy text-white hover:bg-aviation-navy-dark h-10 px-4 py-2 w-full",
+              "title": null,
+              "attrs": {
+                "data-pendo-id": "view-location-MIA"
+              },
+              "myIndex": 2,
+              "childIndex": 2,
+              "txt": "View Details",
+              "parentElem": {
+                "tag": "DIV",
+                "id": "",
+                "cls": "p-6 pt-0",
+                "title": null,
+                "attrs": {},
+                "myIndex": 1,
+                "childIndex": 1,
+                "parentElem": {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow cursor-pointer",
+                  "title": null,
+                  "attrs": {
+                    "data-pendo-id": "location-card-MIA"
+                  },
+                  "myIndex": 0,
+                  "childIndex": 0,
+                  "parentElem": {
+                    "tag": "DIV",
+                    "id": "",
+                    "cls": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    "title": null,
+                    "attrs": {
+                      "data-pendo-id": "locations-grid"
+                    },
+                    "myIndex": 1,
+                    "childIndex": 1,
+                    "parentElem": {
+                      "tag": "DIV",
+                      "id": "",
+                      "cls": "container mx-auto px-4 py-8",
+                      "title": null,
+                      "attrs": {
+                        "data-pendo-id": "locations-content"
+                      },
+                      "myIndex": 1,
+                      "childIndex": 1,
+                      "parentElem": {
+                        "tag": "DIV",
+                        "id": "",
+                        "cls": "min-h-screen bg-background",
+                        "title": null,
+                        "attrs": {},
+                        "myIndex": 2,
+                        "childIndex": 2,
+                        "parentElem": {
+                          "tag": "DIV",
+                          "id": "root",
+                          "cls": "",
+                          "title": null,
+                          "attrs": {},
+                          "myIndex": 1,
+                          "childIndex": 0,
+                          "parentElem": {
+                            "tag": "BODY",
+                            "id": "",
+                            "cls": "",
+                            "title": null,
+                            "attrs": {},
+                            "myIndex": 2,
+                            "childIndex": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "flags": [
+                "left"
+              ]
+            }
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "RAMSElfHvXJDNanK",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 3,
+          "bytes": 1910
+        },
+        {
+          "type": "load",
+          "browser_time": 1755096391859,
+          "visitor_id": "demo-user-001",
+          "account_id": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/airport/MIA",
+          "props": {
+            "load_time": 271.19999998807907
+          },
+          "parentTabId": null,
+          "tabId": "EwppeX6nZvxhQIQn",
+          "frameId": "RAMSElfHvXJDNanK",
+          "sessionId": "qqQNMQnFlPewiWV3",
+          "utm": {
+            "channel": "Direct"
+          },
+          "sequence": 4,
+          "bytes": 363
+        }
+      ],
+      "timing_delay_ms": 1200
+    },
+    {
+      "path_id": "multi_airport_comparison",
+      "sequence_order": 11,
+      "base_url": "https://data.pendo.io/data/guide.json/433df316-f215-4918-915c-3e0172fa60eb",
+      "query_params": {
+        "id": "23",
+        "jzb": "eJx1jz1vgzAQhv8K8hwwUEVCTEXqkqFTlK7oiq_EkvFZ_qBDxX_PuUrI0m7W6-fee-5HrDroSP6kRC8ULlSmgL6s60YcBEwTJRt__4KeLcTksYRVQ9Rky4wzlbzh_2uMLvRSOrSKnky40vcEAStDK3warMA5Cdo78lG-nwaeJ6M-nhI2GXMQC0ZQEEH0u2F-6r8scQGdDXL-ums-DKqJFoa-uHa0sCCDbwwWFy7g3ICdE8w5RjtezmLbz94X_n_6vfD8AIrhDhR5R-5y4NHGYW_kiO_KQ82LrDvZ1u2Ri1b0gcc4bqu266pmdJ6U2LYbJ2iNwQ",
+        "v": "2.288.1_prod",
+        "ct": "1755096391860"
+      },
+      "decoded_events": [
+        {
+          "visitorId": "demo-user-001",
+          "accountId": "signature-aviation-demo",
+          "url": "https://pendo-aviation-showcase.lovable.app/airport/MIA",
+          "oldVisitorId": null,
+          "metadata": {
+            "visitor": {
+              "id": "demo-user-001",
+              "email": "demo@signatureaviation.com",
+              "full_name": "Demo User",
+              "language": "en_US"
+            },
+            "account": {
+              "id": "signature-aviation-demo",
+              "name": "Signature Aviation Demo"
+            },
+            "parentAccount": {},
+            "date": "13/08/2025",
+            "version": "2.288.1_prod"
+          }
+        }
+      ],
+      "timing_delay_ms": 1200
+    }
+  ]
+}

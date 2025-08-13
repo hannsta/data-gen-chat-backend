@@ -15,96 +15,25 @@ class Simulator:
         pass
     
     async def _smart_wait_for_dynamic_content(self, page, path: str, test_mode: bool = False):
-        """Automatically wait for dynamic content based on the navigation path"""
+        """Automatically wait for dynamic content to load after navigation"""
         
-        # Define path-specific selectors that commonly need extra loading time
-        dynamic_content_selectors = {
-            '/locations': [
-                '[data-pendo-id="locations-grid"]',
-                '[data-pendo-id="location-search-input"]',
-                '[data-pendo-id="location-cards-container"]'
-            ],
-            '/dashboard': [
-                '[data-pendo-id="dashboard-metrics"]',
-                '[data-pendo-id="chart-container"]'
-            ],
-            '/shipments': [
-                '[data-pendo-id="shipments-table"]',
-                '[data-pendo-id="table-header-status"]'
-            ],
-            '/reports': [
-                '[data-pendo-id="reports-grid"]',
-                '[data-pendo-id="report-filters"]'
-            ]
-        }
+        # Generic wait for any dynamic content to stabilize
+        print(f"   🎯 Smart wait: Allowing dynamic content to load on {path}")
         
-        # Check if this path has known dynamic content
-        selectors_to_wait_for = []
-        for known_path, selectors in dynamic_content_selectors.items():
-            if path.startswith(known_path):
-                selectors_to_wait_for = selectors
-                break
+        # Progressive timeout strategy - just wait for page to stabilize
+        base_wait = 1500 if test_mode else 2500
+        print(f"   ⏳ Waiting {base_wait}ms for dynamic content to load...")
+        await page.wait_for_timeout(base_wait)
         
-        if not selectors_to_wait_for:
-            print(f"   ℹ️ No known dynamic content for path: {path}")
-            return
+        # Check if page has finished loading any async content
+        try:
+            # Wait for any pending network requests to complete
+            await page.wait_for_load_state('networkidle', timeout=3000)
+            print(f"   ✅ Page appears stable (no network activity)")
+        except Exception as e:
+            print(f"   ⏸️ Network still active after timeout - continuing anyway")
         
-        print(f"   🎯 Smart wait: Checking for dynamic content on {path}")
-        
-        # Progressive timeout strategy
-        base_timeout = 2000 if test_mode else 4000
-        max_timeout = 5000 if test_mode else 8000
-        
-        for selector in selectors_to_wait_for:
-            try:
-                print(f"   ⏳ Waiting for dynamic element: {selector}")
-                await page.wait_for_selector(selector, state='visible', timeout=base_timeout)
-                print(f"   ✅ Found dynamic element: {selector}")
-                return  # Found at least one key element, we're good
-                
-            except Exception as e:
-                print(f"   ⏸️ Element not found with base timeout: {selector}")
-                
-                # Try with longer timeout for this specific selector
-                try:
-                    print(f"   ⏳ Retrying with extended timeout: {selector}")
-                    await page.wait_for_selector(selector, state='visible', timeout=max_timeout - base_timeout)
-                    print(f"   ✅ Found dynamic element (extended wait): {selector}")
-                    return  # Found it with extended timeout
-                    
-                except Exception as extended_error:
-                    print(f"   ⚠️ Still not found: {selector} - continuing to next selector")
-                    continue
-        
-        # If we get here, none of the expected selectors were found
-        print(f"   ⚠️ No expected dynamic elements found for {path} - page may still be loading")
-        
-        # Fall back to a reasonable wait time
-        fallback_wait = 1000 if test_mode else 2000
-        print(f"   ⏳ Fallback wait: {fallback_wait}ms for dynamic content to load")
-        await page.wait_for_timeout(fallback_wait)
-    
-    def _is_dynamic_selector(self, selector: str) -> bool:
-        """Check if a selector is likely to be dynamically loaded content"""
-        dynamic_patterns = [
-            'location-card',
-            'location-search',
-            'locations-grid',
-            'table-header',
-            'shipments-table',
-            'dashboard-metrics',
-            'chart-container',
-            'reports-grid',
-            'report-filters',
-            'view-details',
-            'data-grid',
-            'search-results',
-            'filter-dropdown',
-            'dynamic-content'
-        ]
-        
-        selector_lower = selector.lower()
-        return any(pattern in selector_lower for pattern in dynamic_patterns)
+        print(f"   ✅ Dynamic content wait completed")
         
     async def simulate_session(self, request: SessionRequest) -> SimulationResponse:
         """Execute a single user session (for testing individual paths)"""
@@ -225,39 +154,88 @@ class Simulator:
                             
                             # Check if previous step was navigate and this selector might need extra time
                             previous_step = steps[i-2] if i > 1 else None
-                            needs_extra_wait = (previous_step and 
-                                              previous_step.get('action') == 'navigate' and
-                                              self._is_dynamic_selector(selector))
                             
                             # Wait for element and check if it exists
                             try:
-                                # Use step-level timeout_ms if provided, otherwise use smart defaults
+                                # Use step-level timeout_ms if provided, otherwise use defaults
                                 step_timeout = step.get('timeout_ms')
                                 if step_timeout:
                                     selector_timeout = step_timeout
-                                elif needs_extra_wait:
-                                    selector_timeout = 5000 if test_mode else 8000  # Back to original values
-                                    print(f"   🎯 Using extended timeout for post-navigation dynamic element")
                                 else:
                                     selector_timeout = 3000 if test_mode else 5000  # Standard timeout
                                 
                                 print(f"   ⏳ Waiting for selector with {selector_timeout}ms timeout...")
                                 await page.wait_for_selector(selector, timeout=selector_timeout)
+                                
+                                # Ensure element is visible and interactable for Pendo
+                                await page.wait_for_selector(selector, state='visible', timeout=2000)
+                                
                                 element = await page.query_selector(selector)
                                 if element:
                                     print(f"   ✅ Element found: {selector}")
-                                    await page.click(selector)
+                                    
+                                    # Scroll element into view if needed for better Pendo tracking
+                                    await element.scroll_into_view_if_needed()
+                                    
+                                    # Wait a moment for any scroll animations
+                                    await page.wait_for_timeout(100)
+                                    
+                                    # Use more reliable click method for Pendo capture
+                                    await element.click(force=False)  # Don't force - let it fail if not properly clickable
                                     print(f"   ✅ Click executed: {selector}")
                                     
-                                    # Brief wait after click for any UI updates (like dropdowns opening)
-                                    brief_wait = 200 if test_mode else 400
+                                    # Longer wait after click for Pendo event processing
+                                    brief_wait = 300 if test_mode else 600  # Increased wait times
                                     await page.wait_for_timeout(brief_wait)
                                     
                                     # Skip Pendo event capture wait in test mode - we only care about selector validation
                                     if not test_mode:
-                                        print(f"   ⏳ Brief wait for Pendo click events...")
-                                        click_wait = 500  # Wait for event capture
-                                        await page.wait_for_timeout(click_wait)  # Brief wait for event capture
+                                        print(f"   ⏳ Waiting for Pendo click events to be captured...")
+                                        click_wait = 1500  # Increased from 1000ms - more time for event capture
+                                        await page.wait_for_timeout(click_wait)
+                                        
+                                        # Force Pendo to flush any pending events
+                                        try:
+                                            flush_result = await page.evaluate("""
+                                                () => {
+                                                    if (window.pendo && window.pendo.flushNow) {
+                                                        window.pendo.flushNow();
+                                                        return 'flushed';
+                                                    } else if (window.pendo && window.pendo.track) {
+                                                        // Trigger a lightweight event to force batch send
+                                                        window.pendo.track('_flush_trigger', {});
+                                                        return 'triggered';
+                                                    }
+                                                    return 'no_flush_available';
+                                                }
+                                            """)
+                                            print(f"   🔄 Pendo flush result: {flush_result}")
+                                        except Exception as flush_error:
+                                            print(f"   ⚠️ Could not flush Pendo events: {flush_error}")
+                                        
+                                        # Additional wait after flush for network requests
+                                        await page.wait_for_timeout(500)
+                                        
+                                        # Debug: Check if Pendo tracked the click
+                                        try:
+                                            pendo_debug = await page.evaluate("""
+                                                () => {
+                                                    if (window.pendo && window.pendo._q) {
+                                                        return {
+                                                            queueLength: window.pendo._q.length,
+                                                            lastEvents: window.pendo._q.slice(-3).map(event => ({
+                                                                method: event[0],
+                                                                args: event.slice(1)
+                                                            }))
+                                                        };
+                                                    }
+                                                    return { error: 'Pendo not available' };
+                                                }
+                                            """)
+                                            print(f"   🔍 Pendo event queue: {pendo_debug}")
+                                        except Exception as debug_error:
+                                            print(f"   ⚠️ Could not check Pendo queue: {debug_error}")
+                                        
                                         print(f"   ⏳ Continuing...")
                                 else:
                                     print(f"   ❌ Element not found: {selector}")
@@ -298,18 +276,12 @@ class Simulator:
                             
                             # Check if previous step was navigate and this selector might need extra time
                             previous_step = steps[i-2] if i > 1 else None
-                            needs_extra_wait = (previous_step and 
-                                              previous_step.get('action') == 'navigate' and
-                                              self._is_dynamic_selector(selector))
                             
                             try:
-                                # Use step-level timeout_ms if provided, otherwise use smart defaults
+                                # Use step-level timeout_ms if provided, otherwise use defaults
                                 step_timeout = step.get('timeout_ms')
                                 if step_timeout:
                                     selector_timeout = step_timeout
-                                elif needs_extra_wait:
-                                    selector_timeout = 5000 if test_mode else 8000  # Back to original values
-                                    print(f"   🎯 Using extended timeout for post-navigation dynamic element")
                                 else:
                                     selector_timeout = 3000 if test_mode else 5000  # Standard timeout
                                 
@@ -419,6 +391,26 @@ class Simulator:
                 else:
                     # In normal mode, we need to capture all Pendo requests
                     print(f"   ⏳ Final wait for any remaining Pendo events...")
+                    
+                    # Force final Pendo flush before waiting
+                    try:
+                        final_flush = await page.evaluate("""
+                            () => {
+                                if (window.pendo && window.pendo.flushNow) {
+                                    window.pendo.flushNow();
+                                    return 'final_flush_complete';
+                                } else if (window.pendo && window.pendo.track) {
+                                    // Trigger final event to force batch send
+                                    window.pendo.track('_final_flush', { session_complete: true });
+                                    return 'final_trigger_sent';
+                                }
+                                return 'no_final_flush';
+                            }
+                        """)
+                        print(f"   🔄 Final Pendo flush: {final_flush}")
+                    except Exception as final_flush_error:
+                        print(f"   ⚠️ Final flush failed: {final_flush_error}")
+                    
                     await page.wait_for_timeout(3000)
                     print(f"   ⏳ Ensuring all network requests are captured...")
                     

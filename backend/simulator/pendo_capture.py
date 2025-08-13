@@ -18,6 +18,8 @@ import asyncio
 import aiohttp
 import ssl
 from dataclasses import dataclass, asdict
+import re
+from faker import Faker
 
 @dataclass
 class PendoEventTemplate:
@@ -207,6 +209,14 @@ class PendoReplay:
     
     def __init__(self):
         self.session = None
+        # Realistic browser headers for server-side attribution
+        self.user_agent = (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/139.0.0.0 Safari/537.36"
+        )
+        # Faker for realistic visitor identities
+        self.faker = Faker()
     
     async def __aenter__(self):
         # Create session with SSL verification disabled for demo purposes
@@ -256,12 +266,20 @@ class PendoReplay:
     
     def generate_user_session_ids(self) -> Dict[str, str]:
         """Generate realistic session identifiers for one user"""
+        account_id = "demo_account"
+        # Generate realistic first.last email local part
+        first = self.faker.first_name()
+        last = self.faker.last_name()
+        local = f"{first}.{last}".lower()
+        # Sanitize to allowed email characters
+        local = re.sub(r"[^a-z0-9._-]", "", local)
+        visitor_email = f"{local}@{account_id}.com"
         return {
-            'visitor_id': f"_PENDO_T_{self.random_string(11)}",
+            'visitor_id': visitor_email,
             'session_id': self.random_string(16),
             'tab_id': self.random_string(15),
             'frame_id': self.random_string(16),
-            'account_id': "demo_account"  # Keep consistent for demo
+            'account_id': account_id
         }
     
     def random_string(self, length: int) -> str:
@@ -304,15 +322,48 @@ class PendoReplay:
         for event in template.decoded_events:
             modified_event = event.copy()
             
-            # Update with new session data
-            modified_event.update({
-                'browser_time': browser_time,
-                'visitor_id': session_ids['visitor_id'],
-                'session_id': session_ids['session_id'],
-                'tab_id': session_ids['tab_id'],
-                'frame_id': session_ids['frame_id'],
-                'account_id': session_ids['account_id']
-            })
+            # Update with new session data (respect Pendo's expected key casing)
+            modified_event['browser_time'] = browser_time
+            # snake_case fields (as observed in captured events)
+            modified_event['visitor_id'] = session_ids['visitor_id']
+            modified_event['account_id'] = session_ids['account_id']
+            # camelCase fields (override if present; do NOT add snake_case duplicates)
+            modified_event['sessionId'] = session_ids['session_id']
+            modified_event['tabId'] = session_ids['tab_id']
+            modified_event['frameId'] = session_ids['frame_id']
+
+            # Normalize other possible timestamp fields if present/expected
+            # Keep them aligned to browser_time for consistency
+            # Some payloads may use camelCase keys depending on event type
+            if 'browserSentTime' in modified_event or 'displayBrowserTime' in modified_event:
+                modified_event['browserSentTime'] = browser_time
+                modified_event['displayBrowserTime'] = browser_time
+            if 'browser_sent_time' in modified_event or 'display_browser_time' in modified_event:
+                modified_event['browser_sent_time'] = browser_time
+                modified_event['display_browser_time'] = browser_time
+
+            # Enrich browser metadata and classification
+            modified_event['userAgent'] = self.user_agent
+            # Prefer version from event; otherwise derive from query param 'v' (strip _prod suffix if present)
+            if 'version' not in modified_event:
+                v = template.query_params.get('v') if isinstance(template.query_params, dict) else None
+                if v:
+                    modified_event['version'] = v.replace('_prod', '')
+            # Align with typical values from captured events
+            modified_event.setdefault('source', 'web')
+            modified_event.setdefault('class', 'ui')
+
+            # Remove server-assigned/display-only fields if present
+            for k in ['id', 'appId', 'note', 'receivedTime', 'processedTime', 'remoteIp',
+                      'location', 'displayId', 'displayBrowserTime', 'displayVisitor',
+                      'displayAccount', 'displayOtherAgent']:
+                if k in modified_event:
+                    modified_event.pop(k, None)
+
+            # Remove unintended snake_case duplicates for IDs if any
+            for k in ['session_id', 'tab_id', 'frame_id']:
+                if k in modified_event:
+                    modified_event.pop(k, None)
             
             modified_events.append(modified_event)
         
@@ -331,9 +382,28 @@ class PendoReplay:
         print(f"   → Events in payload: {len(modified_events)}")
         print(f"   → User: {session_ids['visitor_id'][:20]}...")
         
+        # Derive referer/origin from the first event URL if available
+        referer_url = None
+        if modified_events and isinstance(modified_events[0], dict):
+            referer_url = modified_events[0].get('url')
+        headers = {
+            'User-Agent': self.user_agent,
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Connection': 'keep-alive'
+        }
+        if referer_url:
+            headers['Referer'] = referer_url
+            try:
+                parsed = urllib.parse.urlparse(referer_url)
+                origin = f"{parsed.scheme}://{parsed.netloc}"
+                headers['Origin'] = origin
+            except Exception:
+                pass
+        
         # Send the GET request (matching original Pendo format)
         try:
-            async with self.session.get(url) as response:
+            async with self.session.get(url, headers=headers) as response:
                 if response.status == 200:
                     print(f"✅ Pendo GET request successful: {template.path_id} at {timestamp.strftime('%H:%M:%S')}")
                 else:

@@ -23,15 +23,47 @@ class SimulationStep(BaseModel):
 
 class UserJourneyPath(BaseModel):
     path_id: str = Field(..., description="Unique identifier for this user journey path")
-    percentage: float = Field(..., description="Percentage of users who follow this exact path", ge=0, le=100)
+    percentage: Optional[float] = Field(None, description="Percentage of users who follow this exact path (null if using user segments)", ge=0, le=100)
     description: str = Field(..., description="Human-readable description of user behavior")
     steps: List[SimulationStep] = Field(..., description="Exact sequence of steps this user type follows")
+
+# New models for user segmentation
+class Account(BaseModel):
+    """Represents a B2B company/organization account"""
+    account_id: str = Field(..., description="Unique company identifier (e.g. 'acmecorp')")
+    attributes: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Company attributes (e.g. tier, industry)")
+    user_count: int = Field(10, description="Number of users in this account", ge=1)
+
+class UserSegment(BaseModel):
+    """Defines a user segment with minimal metadata and path preferences"""
+    segment_id: str = Field(..., description="Unique identifier for this user segment")
+    percentage: float = Field(..., description="Percentage of total users in this segment", ge=0, le=100)
+    description: str = Field(..., description="Human-readable description of this user segment")
+    
+    # Simplified metadata - just the essentials
+    user_attributes: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Key user attributes for Pendo (e.g. plan_type, user_role)")
+    
+    # Path assignment logic
+    path_preferences: Dict[str, float] = Field(..., description="Mapping of path_id to percentage preference for this segment")
 
 class WorkflowDefinition(BaseModel):
     workflow_name: str = Field(..., description="Unique identifier for the workflow")
     description: Optional[str] = Field(None, description="Human-readable description")
     user_journey_paths: List[UserJourneyPath] = Field(..., description="Specific user journey paths with percentages")
+    
+    # Account and user segmentation structure
+    accounts: Optional[List[Account]] = Field(None, description="B2B company accounts that will use the system")
+    user_segments: Optional[List[UserSegment]] = Field(None, description="User segments with metadata and path preferences (enables advanced user stories)")
+    
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional workflow metadata")
+    
+    def uses_segmentation(self) -> bool:
+        """Check if this workflow uses user segmentation"""
+        return self.user_segments is not None and len(self.user_segments) > 0
+    
+    def uses_accounts(self) -> bool:
+        """Check if this workflow defines specific accounts"""
+        return self.accounts is not None and len(self.accounts) > 0
 
 class SessionRequest(BaseModel):
     workflow_name: str = Field(..., description="Name of workflow to execute")

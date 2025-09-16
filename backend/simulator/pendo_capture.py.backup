@@ -319,7 +319,7 @@ class PendoReplay:
             'frame_id': self.random_string(16),
             'account_id': account_id,
             # Store simplified attributes for Pendo payload population
-            '_user_attributes': {**user_attributes, 'first_name': first, 'last_name': last},
+            '_user_attributes': user_attributes,
             '_account_attributes': account_attributes,
             '_segment_id': segment_metadata.get('segment_id', 'default')
         }
@@ -430,46 +430,6 @@ class PendoReplay:
             for k in ['session_id', 'tab_id', 'frame_id']:
                 if k in modified_event:
                     modified_event.pop(k, None)
-            
-            
-            # Enrich metadata for meta events with detailed visitor and account information
-            if event.get('type') == 'meta' and 'props' in modified_event:
-                # Get stored metadata from session_ids
-                user_attrs = session_ids.get('_user_attributes', {})
-                account_attrs = session_ids.get('_account_attributes', {})
-                segment_id = session_ids.get('_segment_id', 'default')
-                
-                # Build rich visitor object with dynamic attributes
-                visitor_data = {
-                    'id': session_ids['visitor_id'],
-                    'email': session_ids['visitor_id'],  # visitor_id is the email
-                    'full_name': f"{user_attrs.get('first_name', 'User')} {user_attrs.get('last_name', 'Name')}",
-                    'language': 'en_US'
-                }
-                
-                # Dynamically add ALL user attributes from the JSON (except first_name/last_name which are handled above)
-                for key, value in user_attrs.items():
-                    if key not in ['first_name', 'last_name']:
-                        visitor_data[key] = value
-                
-                # Build rich account object with dynamic attributes
-                account_data = {
-                    'id': session_ids['account_id'],
-                    'name': account_attrs.get('name', session_ids['account_id'].title())
-                }
-                
-                # Dynamically add ALL account attributes from the JSON
-                for key, value in account_attrs.items():
-                    if key != 'name':  # name is handled above
-                        account_data[key] = value
-                
-                # Update the props with rich metadata
-                modified_event['props']['visitor'] = visitor_data
-                modified_event['props']['account'] = account_data
-                
-                # Add segment information if available
-                if segment_id != 'default':
-                    modified_event['props']['segment_id'] = segment_id
             
             modified_events.append(modified_event)
         

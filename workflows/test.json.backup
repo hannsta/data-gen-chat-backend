@@ -86,7 +86,7 @@
   "user_journey_paths": [
     {
       "path_id": "complete_reservation_journey",
-      "percentage": 0,
+      "percentage": null,
       "description": "User searches, explores airport details, and completes reservation",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1400, "description": "Navigate to homepage"},
@@ -104,7 +104,7 @@
     },
     {
       "path_id": "quick_exit_after_search",
-      "percentage": 0,
+      "percentage": null,
       "description": "User performs search but exits before interacting further",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1200, "description": "Start at homepage"},
@@ -115,7 +115,7 @@
     },
     {
       "path_id": "reservation_abandonment",
-      "percentage": 0,
+      "percentage": null,
       "description": "User begins reservation but exits mid-form",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1500, "description": "Navigate to homepage"},
@@ -128,7 +128,7 @@
     },
     {
       "path_id": "location_browse_to_airport",
-      "percentage": 0,
+      "percentage": null,
       "description": "User explores airport from locations page",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1200, "description": "Land on homepage"},
@@ -139,7 +139,7 @@
     },
     {
       "path_id": "account_loyalty_exploration",
-      "percentage": 0,
+      "percentage": null,
       "description": "User visits dashboard and explores TailWins or Bravo",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1200, "description": "Land on homepage"},
@@ -150,7 +150,7 @@
     },
     {
       "path_id": "service_info_exploration",
-      "percentage": 0,
+      "percentage": null,
       "description": "User explores tabs and pricing but doesn't book",
       "steps": [
         {"action": "navigate", "value": "/", "delay_ms": 1400, "description": "Start at homepage"},

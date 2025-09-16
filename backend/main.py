@@ -71,6 +71,21 @@ async def execute_workflow(request: DirectExecutionRequest):
         app_url = str(request.app_url)
         user_journey_paths = [path.dict() for path in workflow_data.user_journey_paths]
         
+        # Extract user segments and accounts if present
+        user_segments = None
+        accounts = None
+        
+        if workflow_data.user_segments:
+            user_segments = [segment.dict() for segment in workflow_data.user_segments]
+            print(f"🎯 Using user segmentation: {len(user_segments)} segments defined")
+        
+        if workflow_data.accounts:
+            accounts = [account.dict() for account in workflow_data.accounts]
+            print(f"🏢 Using account structure: {len(accounts)} companies defined")
+        
+        if not user_segments and not accounts:
+            print(f"🎯 Using legacy path-based distribution")
+        
         # Execute the complete workflow
         result = await record_and_replay(
             workflow_name=workflow_name,
@@ -78,7 +93,9 @@ async def execute_workflow(request: DirectExecutionRequest):
             user_journey_paths=user_journey_paths,
             total_users=request.user_count,
             batch_size=request.batch_size,
-            test_mode=request.test_mode
+            test_mode=request.test_mode,
+            user_segments=user_segments,
+            accounts=accounts
         )
         
         execution_time = time.time() - start_time

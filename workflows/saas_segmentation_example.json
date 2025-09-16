@@ -1,0 +1,168 @@
+{
+  "workflow_name": "saas_simple_segmentation", 
+  "description": "B2B account structure with multiple users per company from different segments",
+  
+  "_comment": "Structure: Each account (company) has ~10 users from different segments. Example: 'acmecorp' has admins, paid users, and free users all working at the same company.",
+  
+  "accounts": [
+    {
+      "account_id": "acmecorp",
+      "attributes": {
+        "tier": "enterprise",
+        "industry": "tech"
+      },
+      "user_count": 12
+    },
+    {
+      "account_id": "retailplus", 
+      "attributes": {
+        "tier": "premium",
+        "industry": "retail"
+      },
+      "user_count": 8
+    },
+    {
+      "account_id": "financegroup",
+      "attributes": {
+        "tier": "standard", 
+        "industry": "finance"
+      },
+      "user_count": 10
+    }
+  ],
+  
+  "user_segments": [
+    {
+      "segment_id": "admin_users",
+      "percentage": 10.0,
+      "description": "Admin users who manage settings and users (found in all companies)",
+      "user_attributes": {
+        "user_role": "admin",
+        "plan_access": "full"
+      },
+      "path_preferences": {
+        "user_management": 60.0,
+        "settings_config": 25.0,
+        "basic_usage": 15.0
+      }
+    },
+    {
+      "segment_id": "paid_users",
+      "percentage": 60.0,
+      "description": "Regular users with paid features (majority in most companies)",
+      "user_attributes": {
+        "user_role": "user",
+        "plan_access": "paid"
+      },
+      "path_preferences": {
+        "advanced_analytics": 40.0,
+        "data_export": 30.0,
+        "basic_usage": 30.0
+      }
+    },
+    {
+      "segment_id": "free_users",
+      "percentage": 30.0,
+      "description": "Users with limited access (trial or basic tier within companies)",
+      "user_attributes": {
+        "user_role": "user",
+        "plan_access": "limited"
+      },
+      "path_preferences": {
+        "onboarding": 50.0,
+        "basic_usage": 30.0,
+        "upgrade_prompt": 20.0
+      }
+    }
+  ],
+  
+  "user_journey_paths": [
+    {
+      "path_id": "advanced_analytics",
+      "percentage": null,
+      "description": "Paid users diving into analytics features",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo='nav-analytics']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo='advanced-reports']", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo='export-data']", "delay_ms": 1000}
+      ]
+    },
+    {
+      "path_id": "data_export",
+      "percentage": null,
+      "description": "Users exporting their data",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo='nav-data']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo='export-button']", "delay_ms": 1000}
+      ]
+    },
+    {
+      "path_id": "user_management",
+      "percentage": null,
+      "description": "Admins managing team members",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo='nav-admin']", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo='user-list']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo='add-user']", "delay_ms": 900}
+      ]
+    },
+    {
+      "path_id": "settings_config",
+      "percentage": null,
+      "description": "Admins configuring account settings",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo='nav-settings']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo='account-config']", "delay_ms": 1000}
+      ]
+    },
+    {
+      "path_id": "onboarding",
+      "percentage": null,
+      "description": "New users going through setup",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo='welcome-tutorial']", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo='next-step']", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo='complete-setup']", "delay_ms": 1200}
+      ]
+    },
+    {
+      "path_id": "basic_usage",
+      "percentage": null,
+      "description": "General app navigation and usage",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo='nav-dashboard']", "delay_ms": 800},
+        {"action": "wait", "delay_ms": 2000},
+        {"action": "click", "selector": "[data-pendo='main-feature']", "delay_ms": 900}
+      ]
+    },
+    {
+      "path_id": "upgrade_prompt",
+      "percentage": null,
+      "description": "Free users seeing upgrade prompts",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo='premium-feature']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo='upgrade-modal']", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo='close-modal']", "delay_ms": 800}
+      ]
+    }
+  ],
+  
+  "metadata": {
+    "segmentation_enabled": true,
+    "accounts_enabled": true,
+    "total_accounts": 3,
+    "total_users_per_account": 10,
+    "total_segments": 3,
+    "total_paths": 7,
+    "focus": "account_based_usage_with_mixed_user_types",
+    "story": "Each company (acmecorp, retailplus, financegroup) has ~10 users: 1 admin (does user_management 60%), 6 paid users (do advanced_analytics 40%), 3 free users (do onboarding 50%)",
+    "pendo_reporting": "Will show usage by account (acmecorp vs retailplus) AND by user segment (admin vs paid vs free) for comprehensive B2B analytics"
+  }
+} 

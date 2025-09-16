@@ -211,10 +211,6 @@ Real Pendo events are now being generated from realistic journeys.”
 - **Mixed user types**: Same company can have admins, power users, and basic users
 - **Proper account tracking**: All users from "acmecorp" have the same account_id in Pendo
 
-**🎯 Rich Metadata in Pendo Events:**
-- **All user_attributes and account_attributes** from your JSON are automatically passed to Pendo
-- **Dynamic**: Add any custom attributes - they'll all be included in Pendo visitor/account objects
-
 **When to use each format:**
 - **Basic format**: Simple consumer apps or single-user scenarios
 - **Account format**: B2B SaaS platforms where companies have multiple users

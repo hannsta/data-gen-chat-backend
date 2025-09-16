@@ -127,6 +127,8 @@ This reference evolves with usage. Add more patterns, issues, or improvements as
 
 Generate workflows with specific user journey paths in this exact format:
 
+**Example 1: Consumer Ecommerce (Basic Format)**
+
 ```json
 {
   "workflow_name": "ecommerce_product_discovery",
@@ -315,6 +317,181 @@ Generate workflows with specific user journey paths in this exact format:
 
 ---
 
+**Example 2: B2B SaaS Platform (Account-Based Format)**
+
+```json
+{
+  "workflow_name": "b2b_project_management_platform",
+  "description": "B2B project management with different user types across companies",
+  
+  "accounts": [
+    {
+      "account_id": "techstartup",
+      "attributes": {"tier": "premium", "industry": "tech", "team_size": "small"},
+      "user_count": 8
+    },
+    {
+      "account_id": "manufacturingcorp",
+      "attributes": {"tier": "enterprise", "industry": "manufacturing", "team_size": "large"},
+      "user_count": 15
+    },
+    {
+      "account_id": "consultingfirm",
+      "attributes": {"tier": "standard", "industry": "consulting", "team_size": "medium"},
+      "user_count": 10
+    }
+  ],
+  
+  "user_segments": [
+    {
+      "segment_id": "project_managers",
+      "percentage": 20.0,
+      "description": "Project managers who create and oversee projects",
+      "user_attributes": {
+        "user_role": "manager",
+        "permissions": "full",
+        "experience_level": "advanced"
+      },
+      "path_preferences": {
+        "project_creation_flow": 40.0,
+        "team_management_flow": 35.0,
+        "reporting_dashboard_flow": 25.0
+      }
+    },
+    {
+      "segment_id": "team_members", 
+      "percentage": 65.0,
+      "description": "Team members working on assigned tasks",
+      "user_attributes": {
+        "user_role": "contributor",
+        "permissions": "standard",
+        "experience_level": "intermediate"
+      },
+      "path_preferences": {
+        "task_completion_flow": 50.0,
+        "collaboration_flow": 30.0,
+        "basic_navigation_flow": 20.0
+      }
+    },
+    {
+      "segment_id": "stakeholders",
+      "percentage": 15.0,
+      "description": "Executives and stakeholders viewing project status",
+      "user_attributes": {
+        "user_role": "viewer",
+        "permissions": "read_only",
+        "experience_level": "basic"
+      },
+      "path_preferences": {
+        "reporting_dashboard_flow": 60.0,
+        "basic_navigation_flow": 40.0
+      }
+    }
+  ],
+  
+  "user_journey_paths": [
+    {
+      "path_id": "project_creation_flow",
+      "percentage": null,
+      "description": "Manager creates new project and assigns team",
+      "steps": [
+        {"action": "navigate", "value": "/dashboard", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo-id='create-project-btn']", "delay_ms": 800},
+        {"action": "type", "selector": "[data-pendo-id='project-name-input']", "value": "Q4 Product Launch", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='project-template-dropdown']", "delay_ms": 600},
+        {"action": "click", "selector": "text='Marketing Campaign'", "delay_ms": 700},
+        {"action": "click", "selector": "[data-pendo-id='assign-team-btn']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='team-member-checkbox-1']", "delay_ms": 500},
+        {"action": "click", "selector": "[data-pendo-id='team-member-checkbox-3']", "delay_ms": 500},
+        {"action": "click", "selector": "[data-pendo-id='create-project-submit']", "delay_ms": 1000}
+      ]
+    },
+    {
+      "path_id": "team_management_flow", 
+      "percentage": null,
+      "description": "Manager reviews team progress and makes adjustments",
+      "steps": [
+        {"action": "navigate", "value": "/projects", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='project-card-active']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='team-tab']", "delay_ms": 600},
+        {"action": "click", "selector": "[data-pendo-id='member-progress-view']", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo-id='reassign-task-btn']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='save-changes-btn']", "delay_ms": 800}
+      ]
+    },
+    {
+      "path_id": "task_completion_flow",
+      "percentage": null,
+      "description": "Team member completes assigned tasks",
+      "steps": [
+        {"action": "navigate", "value": "/my-tasks", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='task-item-pending']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='start-work-btn']", "delay_ms": 600},
+        {"action": "type", "selector": "[data-pendo-id='progress-notes']", "value": "Updated mockups based on feedback", "delay_ms": 2000},
+        {"action": "click", "selector": "[data-pendo-id='upload-file-btn']", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='mark-complete-btn']", "delay_ms": 800}
+      ]
+    },
+    {
+      "path_id": "collaboration_flow",
+      "percentage": null,
+      "description": "Team members collaborating on shared work",
+      "steps": [
+        {"action": "navigate", "value": "/projects", "delay_ms": 1100},
+        {"action": "click", "selector": "[data-pendo-id='shared-project-card']", "delay_ms": 900},
+        {"action": "click", "selector": "[data-pendo-id='comments-tab']", "delay_ms": 700},
+        {"action": "type", "selector": "[data-pendo-id='comment-input']", "value": "This looks great! Ready for review.", "delay_ms": 1800},
+        {"action": "click", "selector": "[data-pendo-id='post-comment-btn']", "delay_ms": 600},
+        {"action": "click", "selector": "[data-pendo-id='mention-teammate-btn']", "delay_ms": 800},
+        {"action": "type", "selector": "[data-pendo-id='mention-input']", "value": "@sarah", "delay_ms": 1000}
+      ]
+    },
+    {
+      "path_id": "reporting_dashboard_flow", 
+      "percentage": null,
+      "description": "Viewing project reports and metrics",
+      "steps": [
+        {"action": "navigate", "value": "/reports", "delay_ms": 1200},
+        {"action": "click", "selector": "[data-pendo-id='project-overview-card']", "delay_ms": 800},
+        {"action": "click", "selector": "[data-pendo-id='date-range-picker']", "delay_ms": 600},
+        {"action": "click", "selector": "[data-pendo-id='last-30-days']", "delay_ms": 500},
+        {"action": "click", "selector": "[data-pendo-id='export-report-btn']", "delay_ms": 1000},
+        {"action": "wait", "delay_ms": 2000}
+      ]
+    },
+    {
+      "path_id": "basic_navigation_flow",
+      "percentage": null,
+      "description": "Basic platform navigation and overview",
+      "steps": [
+        {"action": "navigate", "value": "/", "delay_ms": 1000},
+        {"action": "click", "selector": "[data-pendo-id='nav-dashboard']", "delay_ms": 800},
+        {"action": "wait", "delay_ms": 1500},
+        {"action": "click", "selector": "[data-pendo-id='nav-projects']", "delay_ms": 700},
+        {"action": "wait", "delay_ms": 2000},
+        {"action": "click", "selector": "[data-pendo-id='notifications-bell']", "delay_ms": 600}
+      ]
+    }
+  ],
+  
+  "metadata": {
+    "segmentation_enabled": true,
+    "accounts_enabled": true,
+    "total_accounts": 3,
+    "total_segments": 3,
+    "total_paths": 6,
+    "focus": "b2b_project_collaboration_and_management",
+    "pendo_insights": "Track usage by company (techstartup vs manufacturingcorp) AND by role (managers vs contributors vs stakeholders)"
+  }
+}
+```
+
+**Key differences between formats:**
+- **Consumer apps**: Use percentage-based paths, focus on individual user behavior
+- **B2B apps**: Use account structure with user segments, enabling company-level and role-based analytics
+
+---
+
 ### 🎯 Advanced Click Event Capture Tips
 
 - **4+ clicks per path**: More interactions = better event batching
@@ -331,3 +508,12 @@ Generate workflows with specific user journey paths in this exact format:
 
 ---
 
+
+---
+
+### 🎯 Rich Metadata in Pendo Events
+
+**All attributes from your JSON are automatically passed to Pendo:**
+- Account attributes → Pendo account objects
+- User attributes → Pendo visitor objects
+- Add any custom attributes - they'll all be included

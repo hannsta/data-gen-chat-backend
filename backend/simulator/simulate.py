@@ -488,30 +488,25 @@ class Simulator:
         
         print("💡 Failed actions are available in the API response for analysis!")
     
-    async def bulk_simulate(self, workflow_name: str, user_count: int, days: int, user_journey_paths: List[Dict[str, Any]], batch_size: int = 1) -> Dict[str, Any]:
-        """Execute bulk simulation using Pendo request replay"""
+    async def bulk_simulate(self, workflow_name: str, user_count: int, days: int, user_journey_paths: List[Dict[str, Any]], user_segments: List[Dict[str, Any]] = None, accounts: List[Dict[str, Any]] = None, batch_size: int = 1) -> Dict[str, Any]:
+        """Execute bulk simulation using Pendo request replay with optional user segmentation and account structure"""
         
         print(f"🚀 Starting bulk simulation for {workflow_name}")
         print(f"   • Total users: {user_count}")
         print(f"   • Time range: {days} days")
         
-        # Calculate distribution based on user journey percentages
-        path_distributions = {}
-        total_percentage = sum(path['percentage'] for path in user_journey_paths)
+        # Check if we're using account-based structure
+        if accounts:
+            print(f"   • Using account structure: {len(accounts)} companies defined")
+            path_distributions = self._calculate_account_based_distribution(user_count, accounts, user_segments, user_journey_paths)
+        elif user_segments:
+            print(f"   • Using user segmentation: {len(user_segments)} segments")
+            path_distributions = self._calculate_segment_based_distribution(user_count, user_segments, user_journey_paths)
+        else:
+            print(f"   • Using legacy path-based distribution")
+            path_distributions = self._calculate_legacy_distribution(user_count, user_journey_paths)
         
-        for path in user_journey_paths:
-            path_percentage = path['percentage'] / total_percentage
-            path_count = int(user_count * path_percentage)
-            path_distributions[path['path_id']] = path_count
-        
-        # Ensure we hit the exact user count
-        assigned_count = sum(path_distributions.values())
-        if assigned_count < user_count:
-            # Add remaining users to the largest path
-            largest_path = max(path_distributions.keys(), key=lambda k: path_distributions[k])
-            path_distributions[largest_path] += user_count - assigned_count
-        
-        print(f"📊 User distribution:")
+        print(f"📊 Final user distribution:")
         for path_id, count in path_distributions.items():
             percentage = (count / user_count) * 100
             print(f"   • {path_id}: {count} users ({percentage:.1f}%)")
@@ -519,11 +514,13 @@ class Simulator:
         # Execute Pendo replay (stateless)
         try:
             async with PendoReplay() as replay:
-                await replay.bulk_replay(
+                await replay.bulk_replay_with_segments(
                     workflow_name=workflow_name,
                     path_distributions=path_distributions,
                     days_back=days,
-                    batch_size=batch_size
+                    batch_size=batch_size,
+                    user_segments=user_segments,
+                    accounts=accounts
                 )
             
             return {
@@ -545,9 +542,143 @@ class Simulator:
                 'sessions_completed': 0,
                 'workflow_name': workflow_name
             }
+    
+    def _calculate_segment_based_distribution(self, user_count: int, user_segments: List[Dict[str, Any]], user_journey_paths: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Calculate user distribution across paths based on user segments"""
+        path_distributions = {}
+        
+        # Initialize all paths to 0
+        for path in user_journey_paths:
+            path_distributions[path['path_id']] = 0
+        
+        # Calculate users per segment
+        total_segment_percentage = sum(segment['percentage'] for segment in user_segments)
+        
+        for segment in user_segments:
+            segment_percentage = segment['percentage'] / total_segment_percentage
+            segment_user_count = int(user_count * segment_percentage)
+            
+            print(f"📋 Segment '{segment['segment_id']}': {segment_user_count} users")
+            
+            # Distribute segment users across paths based on path_preferences
+            path_preferences = segment['path_preferences']
+            total_preference_percentage = sum(path_preferences.values())
+            
+            for path_id, preference_percentage in path_preferences.items():
+                if path_id in path_distributions:
+                    preference_ratio = preference_percentage / total_preference_percentage
+                    path_users = int(segment_user_count * preference_ratio)
+                    path_distributions[path_id] += path_users
+                    print(f"   • {path_id}: +{path_users} users ({preference_percentage}%)")
+                else:
+                    print(f"   ⚠️ Warning: Path '{path_id}' in segment preferences not found in user_journey_paths")
+        
+        # Ensure we hit the exact user count by adjusting the largest path
+        assigned_count = sum(path_distributions.values())
+        if assigned_count != user_count:
+            difference = user_count - assigned_count
+            largest_path = max(path_distributions.keys(), key=lambda k: path_distributions[k])
+            path_distributions[largest_path] += difference
+            print(f"   🔧 Adjusted {largest_path} by {difference} users to reach exact count")
+        
+        return path_distributions
+    
+    def _calculate_legacy_distribution(self, user_count: int, user_journey_paths: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Calculate user distribution based on legacy path percentages"""
+        path_distributions = {}
+        total_percentage = sum(path['percentage'] for path in user_journey_paths if path.get('percentage'))
+        
+        for path in user_journey_paths:
+            if path.get('percentage'):
+                path_percentage = path['percentage'] / total_percentage
+                path_count = int(user_count * path_percentage)
+                path_distributions[path['path_id']] = path_count
+        
+        # Ensure we hit the exact user count
+        assigned_count = sum(path_distributions.values())
+        if assigned_count < user_count:
+            largest_path = max(path_distributions.keys(), key=lambda k: path_distributions[k])
+            path_distributions[largest_path] += user_count - assigned_count
+        
+        return path_distributions
+
+    def _calculate_account_based_distribution(self, user_count: int, accounts: List[Dict[str, Any]], user_segments: List[Dict[str, Any]], user_journey_paths: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Calculate user distribution when accounts and segments are both defined"""
+        path_distributions = {}
+        
+        # Initialize all paths to 0
+        for path in user_journey_paths:
+            path_distributions[path['path_id']] = 0
+        
+        # Calculate total users per account
+        total_account_users = sum(account.get('user_count', 10) for account in accounts)
+        
+        print(f"📋 Account-based distribution:")
+        print(f"   • {len(accounts)} accounts with {total_account_users} total account users")
+        print(f"   • Scaling to {user_count} simulation users")
+        
+        # For each account, distribute its users across segments, then across paths
+        for account in accounts:
+            account_id = account['account_id'] 
+            account_user_count = account.get('user_count', 10)
+            
+            # Scale account users to fit total simulation count
+            scaled_account_users = int((account_user_count / total_account_users) * user_count)
+            
+            print(f"   • Account '{account_id}': {scaled_account_users} users")
+            
+            # Distribute this account's users across segments
+            account_path_distribution = self._distribute_account_users_across_segments(
+                scaled_account_users, user_segments, user_journey_paths
+            )
+            
+            # Add to total distribution
+            for path_id, count in account_path_distribution.items():
+                path_distributions[path_id] += count
+                print(f"     - {path_id}: +{count} users")
+        
+        # Ensure we hit exact user count
+        assigned_count = sum(path_distributions.values())
+        if assigned_count != user_count:
+            difference = user_count - assigned_count
+            largest_path = max(path_distributions.keys(), key=lambda k: path_distributions[k])
+            path_distributions[largest_path] += difference
+            print(f"   🔧 Adjusted {largest_path} by {difference} users to reach exact count")
+        
+        return path_distributions
+    
+    def _distribute_account_users_across_segments(self, account_user_count: int, user_segments: List[Dict[str, Any]], user_journey_paths: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Distribute users within a single account across segments and paths"""
+        path_distributions = {}
+        
+        # Initialize paths
+        for path in user_journey_paths:
+            path_distributions[path['path_id']] = 0
+        
+        # Calculate segment distribution for this account
+        total_segment_percentage = sum(segment['percentage'] for segment in user_segments)
+        
+        for segment in user_segments:
+            segment_percentage = segment['percentage'] / total_segment_percentage
+            segment_users_in_account = int(account_user_count * segment_percentage)
+            
+            if segment_users_in_account == 0:
+                continue
+                
+            # Distribute segment users across paths
+            path_preferences = segment['path_preferences']
+            total_preference = sum(path_preferences.values())
+            
+            for path_id, preference_percentage in path_preferences.items():
+                if path_id in path_distributions:
+                    preference_ratio = preference_percentage / total_preference
+                    path_users = int(segment_users_in_account * preference_ratio)
+                    path_distributions[path_id] += path_users
+        
+        return path_distributions
 
 # Convenience functions for easy usage
-async def record_and_replay(workflow_name: str, app_url: str, user_journey_paths: List[Dict[str, Any]], total_users: int = 1, batch_size: int = 1, test_mode: bool = False):
+async def record_and_replay(workflow_name: str, app_url: str, user_journey_paths: List[Dict[str, Any]], total_users: int = 1, batch_size: int = 1, test_mode: bool = False, user_segments: List[Dict[str, Any]] = None, accounts: List[Dict[str, Any]] = None):
     """Complete workflow: record templates then replay at scale"""
     
     # Initialize (stateless)
@@ -619,6 +750,8 @@ async def record_and_replay(workflow_name: str, app_url: str, user_journey_paths
         user_count=total_users,
         days=6,
         user_journey_paths=user_journey_paths,
+        user_segments=user_segments,
+        accounts=accounts,
         batch_size=batch_size
     )
     

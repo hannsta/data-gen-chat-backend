@@ -17,21 +17,8 @@ Follow these steps to create your Lovable app, ensure Pendo is set up with good 
 - Ask Lovable to generate a README for your app using the copy/paste prompt in `lovable-readme-instructions.md`.
 - Save the generated README in your app repo for reference (optional but recommended).
 
-### Step 4 — Run the backend locally
-- Requirements: Python, pip, and Chromium for Playwright.
-- From the repo root, install dependencies and browsers:
-```bash
-pip install -r requirements.txt
-playwright install chromium
-```
-- Start the API server:
-```bash
-python start_server.py
-```
-- Open API docs at `http://localhost:8000/docs`.
-- Docker/Railway users can use the included `Dockerfile` and `railway.toml` if preferred.
 
-### Step 5 — Interact with the bot
+### Step 4 — Interact with the bot
 - The bot orchestrates workflow simulation against your Lovable app.
 - See guidance and constraints in `prompts/agent-instructions.md`.
 - Provide the bot with:
@@ -39,6 +26,19 @@ python start_server.py
   - **Confirmation that Pendo is installed** and **which elements/pages are tagged** (from Step 2)
   - Any specific user journeys you want covered
 - The bot will produce a workflow definition and can call the backend to validate or execute simulations.
+
+### B2B Account Structure (Advanced)
+For **B2B SaaS platforms** where multiple users work for the same company:
+- **Define company accounts** with attributes (tier, industry, team size, region, revenue, etc.)
+- **Create user segments** representing different roles (admin, manager, contributor) 
+- **Mixed user types per company**: Same company can have admins, power users, and basic users
+- **Rich Pendo reporting**: Analyze usage by account (company) AND by user segment
+- **Example**: "TechCorp" account has 12 users: 2 admins, 7 managers, 3 contributors
+
+**🎯 Rich Metadata Passed to Pendo:**
+- **All account and user attributes** from your JSON are automatically included in Pendo events
+
+The bot will automatically detect B2B scenarios and suggest account-based structures when appropriate.
 
 ### Fast validation vs full execution
 - The backend supports a fast validation mode to quickly check selectors and paths.

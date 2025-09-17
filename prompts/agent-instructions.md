@@ -131,80 +131,11 @@ Real Pendo events are now being generated from realistic journeys.”
 }
 ```
 
-**Advanced Format (B2B Account Structure with User Segmentation):**
-```json
-{
-  "workflow_name": "saas_platform_usage",
-  "description": "B2B account structure with multiple users per company",
-  
-  "accounts": [
-    {
-      "account_id": "acmecorp",
-      "attributes": {"tier": "enterprise", "industry": "tech"},
-      "user_count": 12
-    },
-    {
-      "account_id": "retailplus",
-      "attributes": {"tier": "premium", "industry": "retail"}, 
-      "user_count": 8
-    }
-  ],
-  
-  "user_segments": [
-    {
-      "segment_id": "admin_users",
-      "percentage": 15.0,
-      "description": "Admin users who manage settings",
-      "user_attributes": {"user_role": "admin", "plan_access": "full"},
-      "path_preferences": {
-        "admin_workflow": 60.0,
-        "basic_usage": 40.0
-      }
-    },
-    {
-      "segment_id": "regular_users", 
-      "percentage": 85.0,
-      "description": "Regular users doing daily tasks",
-      "user_attributes": {"user_role": "user", "plan_access": "standard"},
-      "path_preferences": {
-        "main_workflow": 70.0,
-        "basic_usage": 30.0
-      }
-    }
-  ],
-  
-  "user_journey_paths": [
-    {
-      "path_id": "admin_workflow",
-      "percentage": null,
-      "description": "Admin managing users",
-      "steps": [
-        {"action": "navigate", "value": "/admin", "delay_ms": 1000},
-        {"action": "click", "selector": "[data-pendo-id='user-management']", "delay_ms": 800}
-      ]
-    },
-    {
-      "path_id": "main_workflow", 
-      "percentage": null,
-      "description": "Regular user daily tasks",
-      "steps": [
-        {"action": "navigate", "value": "/dashboard", "delay_ms": 1000},
-        {"action": "click", "selector": "[data-pendo-id='main-feature']", "delay_ms": 800}
-      ]
-    },
-    {
-      "path_id": "basic_usage",
-      "percentage": null,
-      "description": "Basic navigation",
-      "steps": [
-        {"action": "navigate", "value": "/", "delay_ms": 1000},
-        {"action": "click", "selector": "[data-pendo-id='nav-home']", "delay_ms": 800}
-      ]
-    }
-  ]
-}
-```
-
+**Advanced Format (B2B Account Structure):**
+- Use `accounts` array with `account_id`, `attributes`, and `user_count`
+- Use `user_segments` array with `segment_id`, `percentage`, `user_attributes`, and `path_preferences`
+- Set `percentage: null` in `user_journey_paths` when using segmentation
+- **See simulation_reference.md for complete JSON examples**
 **Key Benefits of Account Structure:**
 - **Realistic B2B data**: Companies have multiple users with different roles
 - **Rich Pendo reporting**: Analyze usage by account (company) AND by user segment
